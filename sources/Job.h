@@ -5,7 +5,7 @@
 
 class Job {
 private:
-    std::string category;
+    int category;
     int cores;
     bool GPU;
     double runtime;
@@ -15,8 +15,8 @@ private:
     // May not be necessary
     double endTime;
 public:
-    Job(User* owner, std::string category, int cores, bool GPU, double runtime);
-    std::string getCategory();
+    Job(User* owner, int category, int cores, bool GPU, double runtime);
+    int getCategory();
     int getCores();
     bool needsGPU();
     double getRuntime();

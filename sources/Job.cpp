@@ -1,7 +1,7 @@
 
 #include "Job.h"
 
-Job::Job(User *owner, std::string category, int cores, bool GPU, double runtime) {
+Job::Job(User *owner, int category, int cores, bool GPU, double runtime) {
     (*this).category = category;
     (*this).cores = cores;
     (*this).GPU= GPU;
@@ -12,7 +12,7 @@ Job::Job(User *owner, std::string category, int cores, bool GPU, double runtime)
     (*this).endTime = 0;
 }
 
-std::string Job::getCategory() {
+int Job::getCategory() {
     return (*this).category;
 }
 

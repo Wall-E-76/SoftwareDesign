@@ -6,17 +6,18 @@ class User {
 protected:
     int expoParameter;
     double nextJobTime;
-    int budget;
-    int spendings;
+    double budget;
+    double spendings;
+    // Permission are : short, medium, large, gpu, huge
     std::array<bool,5> permission;
 
 public:
     bool isTime(double time);
     double generateNewTime();
     virtual char whatAmI()=0;
-    int getBudget();
-    int getSpendings();
-    bool spend(int newSpendings);
+    double getBudget();
+    double getSpendings();
+    bool spend(double newSpendings);
     std::array<bool,5> getPermission();
 };
 

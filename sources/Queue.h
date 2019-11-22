@@ -12,8 +12,9 @@ private:
 public:
     Queue();
     void insertJob(Job* job);
-    Job nextJob();
+    Job* nextJob();
     void removeJob();
+    //What would we need this method for?
     std::vector <Job*> getJobsInQueue();
     void incrNumJobsProcessed();
     void addWaitTime(double time);
