@@ -1,4 +1,5 @@
 
+#include <random>
 #include "User.h"
 
 bool User::isTime(double time) {
@@ -19,4 +20,15 @@ bool User::spend(int newSpendings) {
         return true;
     }
     return false;
+}
+
+double User::generateNewTime() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::exponential_distribution<> d((*this).expoParameter);
+    return d(gen);
+}
+
+std::array<bool,5> User::getPermission() {
+    return (*this).permission;
 }

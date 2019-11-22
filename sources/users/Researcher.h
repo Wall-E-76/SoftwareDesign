@@ -1,11 +1,19 @@
 #pragma once
 
 
-class Researcher {
+#include "User.h"
+
+struct Group {
+    int budget;
+    int expoParameter;
+    std::array<bool,5> permission;
+};
+
+class Researcher : public User {
 private:
     int grant;
 public:
-    Researcher(int group, int grant);
-    char whatAmI();
+    Researcher(struct Group group, int grant);
+    char whatAmI() override;
 };
 
