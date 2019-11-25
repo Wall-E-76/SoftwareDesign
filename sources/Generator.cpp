@@ -26,14 +26,14 @@ Generator::Generator(int totalNodes) {
     (*this).property = {shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue};
 }
 
-void Generator::addUser(User user) {
+void Generator::addUser(User *user) {
     (*this).users.push_back(user);
 }
 
 int Generator::randomCategory(int i) {
     int sum;
     // We find the number of possible category
-    std::array<bool,5> permission = (*this).users.at(i).getPermission();
+    std::array<bool,5> permission = (*this).users.at(i)->getPermission();
     for (int j = 0; j<5; j++){
         if(permission.at(i)) sum++;
     }
@@ -57,7 +57,7 @@ int Generator::randomCategory(int i) {
 
 Job Generator::createJob(int i) {
     User *owner;
-    owner = &(*this).users.at(i);
+    owner = (*this).users.at(i);
     int category = (*this).randomCategory(i);
     bool GPU = false;
     if (category == 3)
@@ -84,7 +84,7 @@ Job Generator::createJob(int i) {
     runtime = roundUp(norm(generator));
     if (runtime>timeMax)
         runtime = timeMax;
-    else if (runtime<TIMESTEP) // ???? what value to put? (ideally the smallest time step) i'm assuming the time step is in hour
+    else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
     return {owner, category, cores, GPU, runtime};
 }
@@ -105,8 +105,8 @@ void Generator::check(Job *job) {
 void Generator::lookForJobs(double currentTime) {
     int n = (*this).users.size();
     for (int i=0; i<n;i++) {
-        if ((*this).users.at(i).isTime(currentTime)) {
-            (*this).users.at(i).generateNewTime();
+        if ((*this).users.at(i)->isTime(currentTime)) {
+            (*this).users.at(i)->generateNewTime();
             Job newJob = createJob(i);
             check(&newJob);
         }

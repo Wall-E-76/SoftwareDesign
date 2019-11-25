@@ -11,9 +11,9 @@ struct Group {
 
 class Researcher : public User {
 private:
-    int grant;
+    double grant;
 public:
-    Researcher(struct Group group, int grant);
+    Researcher(struct Group group, double grant);
     char whatAmI() override;
 };
 

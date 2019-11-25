@@ -1,6 +1,11 @@
-
+#include "sources/Simulation.h"
+#include <iostream>
 
 int main(){
-
-    return 0;
+    int totalNode;
+    std::cout << "How much nodes in this simulation?";
+    std::cin >> totalNode;
+    Simulation s = Simulation(totalNode);
+    s.setup();
+    return 1;
 }
