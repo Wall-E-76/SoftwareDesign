@@ -24,9 +24,6 @@ Generator::Generator(int totalNodes) {
     hugeQueue.timeMax = 24*3; //TODO change the value to a sensible one
 
     (*this).property = {shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue};
-    for (int i = 0; i<5; i++){
-        (*this).queues[i] = new Queue();
-    }
 }
 
 void Generator::addUser(User user) {
@@ -70,7 +67,7 @@ Job Generator::createJob(int i) {
     int cores;
     int coreMax = (*this).property.at(category).coreMax;
     if (GPU){
-        std::normal_distribution<double> norm(128/2);
+        std::normal_distribution<double> norm(8*16/2);
         cores = floor(norm(generator));
     }
     else {
@@ -84,13 +81,12 @@ Job Generator::createJob(int i) {
     double runtime;
     double timeMax = (*this).property.at(category).timeMax;
     std::uniform_int_distribution<int> norm(timeMax/2);
-    runtime = norm(generator);
+    runtime = roundUp(norm(generator));
     if (runtime>timeMax)
         runtime = timeMax;
-    else if (runtime<0.1) // ???? what value to put? (ideally the smallest time step) i'm assuming the time step is in hour
-        runtime=0.1;
+    else if (runtime<TIMESTEP) // ???? what value to put? (ideally the smallest time step) i'm assuming the time step is in hour
+        runtime=TIMESTEP;
     return {owner, category, cores, GPU, runtime};
-
 }
 
 void Generator::check(Job *job) {
@@ -115,6 +111,17 @@ void Generator::lookForJobs(double currentTime) {
             check(&newJob);
         }
     }
+}
+
+double Generator::roundUp(double time){
+    double a = time - floor(time);
+    double b = floor(a/b);
+    double c = a - b;
+    double roundUp =  a+ b*TIMESTEP;
+    if (c > TIMESTEP/2){
+        roundUp += TIMESTEP;
+    }
+    return roundUp;
 }
 
 

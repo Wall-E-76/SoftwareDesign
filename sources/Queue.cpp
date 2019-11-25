@@ -8,9 +8,7 @@ Queue::Queue():
 {
 }
 Queue::Queue(Queue *pQueue):
-    Queue()
-{
-}
+    Queue(){}
 
 void Queue::insertJob(Job *job) {
     (*this).jobsInQueue.push_back(job);

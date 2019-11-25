@@ -22,7 +22,6 @@ public:
     void setup();
     void computeTimeSteps();
     void output();
-    void runSimulation();
     void addMachineHours(Job job);
     void addResultingPrice(Job job);
     void addTurnAroungRatio(Job job);

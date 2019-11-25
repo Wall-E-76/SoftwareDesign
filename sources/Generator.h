@@ -5,6 +5,7 @@
 #include <vector>
 #include "Machine.h"
 #include "Queue.h"
+#include "Simulation.h"
 
 struct PropertyQueue {
     int coreMax;
@@ -25,6 +26,7 @@ public:
     Job createJob(int i);
     void check(Job* job);
     void lookForJobs(double currentTime);
+    double roundUp(double time);
 };
 
 

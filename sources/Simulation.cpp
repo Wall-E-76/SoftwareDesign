@@ -16,6 +16,7 @@ void Simulation::setup() {
     std::vector <struct Group> groups;
     double paramGroup;
     std::string answer;
+    std::array <std::string,5> arrayCategory = {"short","medium", "large", "GPU", "huge"};
     do {
         std::cout << "Registering group " << groups.size() << ": "<< std::endl;
         struct Group group{};
@@ -25,7 +26,7 @@ void Simulation::setup() {
         std::cout << "Parameter for the exponential distribution: ";
         std::cin >> paramGroup;
         group.expoParameter = paramGroup;
-        std::string arrayCategory = {"short","medium", "large", "GPU", "huge"};
+
         for (int i = 0; i<5;i++){
             std::cout<<"Is this group allowed to submit "<< arrayCategory[i]<<" jobs? [y/n]";
             std::cin >> answer;
