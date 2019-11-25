@@ -7,7 +7,7 @@
 #include "Queue.h"
 
 struct PropertyQueue {
-    int nodeMax;
+    int coreMax;
     int timeMax;
 };
 
@@ -19,11 +19,12 @@ private:
 
 public:
     Generator();
-    void addQueue(std::array<Queue,5> &queues);
+    Generator(int totalNodes);
+    void addUser(User user);
     int randomCategory(int i);
     Job createJob(int i);
     void check(Job* job);
-    void lookForJobs(int currentTime);
+    void lookForJobs(double currentTime);
 };
 
 

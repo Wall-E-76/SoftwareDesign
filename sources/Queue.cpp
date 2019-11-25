@@ -7,6 +7,10 @@ Queue::Queue():
     jobsInQueue({})
 {
 }
+Queue::Queue(Queue *pQueue):
+    Queue()
+{
+}
 
 void Queue::insertJob(Job *job) {
     (*this).jobsInQueue.push_back(job);
@@ -38,3 +42,5 @@ void Queue::incrNumJobsProcessed() {
 void Queue::addWaitTime(double time) {
     (*this).addWaitTime(time);
 }
+
+

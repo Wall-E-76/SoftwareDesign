@@ -9,11 +9,11 @@
 
 class Machine {
 private:
-    const int shortMin;
-    const int medMin;
-    const int largeMax;
-    const int gpuNodes;
-    const int totalNodes;
+    int shortMin;
+    int medMin;
+    int largeMax;
+    int gpuNodes;
+    int totalNodes;
     int availableShort;
     int availableMed;
     int availableLarge;

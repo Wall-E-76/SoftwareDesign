@@ -3,11 +3,34 @@
 #include <random>
 
 Generator::Generator() {
-     //TODO convert input into generator data
+     Generator(128);
 }
 
-void Generator::addQueue(std::array<Queue, 5> &queues) {
-    (*this).queues = queues;
+Generator::Generator(int totalNodes) {
+    struct PropertyQueue shortQueue;
+    shortQueue.coreMax = 2;
+    shortQueue.timeMax = 1;
+    struct PropertyQueue medQueue;
+    medQueue.coreMax = floor(totalNodes*0.1*16);
+    medQueue.timeMax = 8;
+    struct PropertyQueue largeQueue;
+    largeQueue.coreMax = floor(totalNodes*0.5*16);
+    largeQueue.timeMax = 16;
+    struct PropertyQueue GPUQueue;
+    GPUQueue.coreMax = floor(8*16);
+    GPUQueue.timeMax = 24*5; //TODO change the value to a sensible one
+    struct PropertyQueue hugeQueue;
+    hugeQueue.coreMax = totalNodes*16;
+    hugeQueue.timeMax = 24*3; //TODO change the value to a sensible one
+
+    (*this).property = {shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue};
+    for (int i = 0; i<5; i++){
+        (*this).queues[i] = new Queue();
+    }
+}
+
+void Generator::addUser(User user) {
+    (*this).users.push_back(user);
 }
 
 int Generator::randomCategory(int i) {
@@ -45,7 +68,7 @@ Job Generator::createJob(int i) {
     std::random_device rd{};
     std::mt19937 generator{rd()};
     int cores;
-    int coreMax = (*this).property.at(category).nodeMax*16;
+    int coreMax = (*this).property.at(category).coreMax;
     if (GPU){
         std::normal_distribution<double> norm(128/2);
         cores = floor(norm(generator));
@@ -83,7 +106,7 @@ void Generator::check(Job *job) {
     }
 }
 
-void Generator::lookForJobs(int currentTime) {
+void Generator::lookForJobs(double currentTime) {
     int n = (*this).users.size();
     for (int i=0; i<n;i++) {
         if ((*this).users.at(i).isTime(currentTime)) {
@@ -93,6 +116,8 @@ void Generator::lookForJobs(int currentTime) {
         }
     }
 }
+
+
 
 
 

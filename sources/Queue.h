@@ -18,5 +18,7 @@ public:
     std::vector <Job*> getJobsInQueue();
     void incrNumJobsProcessed();
     void addWaitTime(double time);
+
+    Queue(Queue *pQueue);
 };
 

@@ -5,7 +5,7 @@
 
 
 struct Curriculum {
-    int budget;
+    double budget;
     int expoParameter;
     int instResourceCap;
     std::array<bool,5> permission;

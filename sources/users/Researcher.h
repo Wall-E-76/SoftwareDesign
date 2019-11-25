@@ -4,7 +4,7 @@
 #include "User.h"
 
 struct Group {
-    int budget;
+    double budget;
     int expoParameter;
     std::array<bool,5> permission;
 };
