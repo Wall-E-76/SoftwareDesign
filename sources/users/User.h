@@ -12,6 +12,7 @@ protected:
     std::array<bool,5> permission;
 
 public:
+    User(int expoParameter, double budget, std::array<bool,5> permission);
     bool isTime(double time);
     double generateNewTime();
     virtual char whatAmI()=0;

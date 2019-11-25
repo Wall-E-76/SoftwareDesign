@@ -1,10 +1,11 @@
 
 #include "Queue.h"
 
-Queue::Queue() {
-    (*this).jobsInQueue ={};
-    (*this).numJobsProcessed = 0;
-    (*this).totalWaitTime = 0;
+Queue::Queue():
+    numJobsProcessed(0),
+    totalWaitTime(0),
+    jobsInQueue({})
+{
 }
 
 void Queue::insertJob(Job *job) {

@@ -1,15 +1,16 @@
 
 #include "Job.h"
 
-Job::Job(User *owner, int category, int cores, bool GPU, double runtime) {
-    (*this).category = category;
-    (*this).cores = cores;
-    (*this).GPU= GPU;
-    (*this).runtime= runtime;
-    (*this).timeEnteredQueue=0;
-    (*this).timeLeftQueue=0;
-    (*this).owner= owner;
-    (*this).endTime = 0;
+Job::Job(User *owner, int category, int cores, bool GPU, double runtime):
+    category(category),
+    cores(cores),
+    GPU(GPU),
+    runtime(runtime),
+    timeLeftQueue(0),
+    timeEnteredQueue(0),
+    owner(owner),
+    endTime(0)
+{
 }
 
 int Job::getCategory() {

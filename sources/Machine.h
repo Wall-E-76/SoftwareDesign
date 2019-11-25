@@ -9,11 +9,11 @@
 
 class Machine {
 private:
-    static int shortMin;
-    static int medMin;
-    static int largeMax;
-    static int gpuNodes;
-    static int totalNodes;
+    const int shortMin;
+    const int medMin;
+    const int largeMax;
+    const int gpuNodes;
+    const int totalNodes;
     int availableShort;
     int availableMed;
     int availableLarge;
@@ -24,7 +24,7 @@ private:
     std::array <Queue,5> queues;
 public:
     Machine(int shortMin, int medMin, int largeMax, int gpuNodes, int totalNodes);
-    void addQueue(std::array <Queue,5> &queues);
+    void addQueue(Queue queue, int category);
     void checkJobsRunning();
     void checkAvailability();
     void setMachineStatus();

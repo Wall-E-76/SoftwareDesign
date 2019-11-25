@@ -2,6 +2,14 @@
 #include <random>
 #include "User.h"
 
+User::User(int expoParameter, double budget, std::array<bool,5> permission):
+        expoParameter(expoParameter),
+        nextJobTime(0),
+        budget(budget),
+        spendings(0),
+        permission({permission[0], permission[1], permission[2], permission[3], permission[4]}){
+}
+
 bool User::isTime(double time) {
     return ((*this).nextJobTime-time>0);
 }
@@ -32,3 +40,5 @@ double User::generateNewTime() {
 std::array<bool,5> User::getPermission() {
     return (*this).permission;
 }
+
+
