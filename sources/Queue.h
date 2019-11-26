@@ -4,11 +4,11 @@
 #include "scheduler/Scheduler.h"
 #include <vector>
 
-#define shortMin 14;
-#define medMin 40;
-#define largeMax 64;
-#define gpuNodes 10;
-#define totalNodes 128;
+#define shortMin 14
+#define medMin 40
+#define largeMax 64
+#define gpuNodes 10
+#define totalNodes 128
 
 class Queue {
 private:

@@ -8,9 +8,6 @@ FIFOScheduler::FIFOScheduler(std::vector<Queue*> queues) {
 
 std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int,5> &running, int &runningTotal, double currentTime) {
 	
-
-	int a = shortMin; //why does this work but shortMin is causing problems below...error is vague
-
 	std::vector<Job*> nextJobs;
 
 	//have only done case 1 so far,
@@ -82,6 +79,7 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int,5> &running
 					running[0] += temp0->getNodes();
 					runningTotal += temp0->getNodes();
 					queues[0]->removeJob(0);
+					temp0 = queues[0]->nextJob();
 				}
 				else
 					break;
@@ -92,6 +90,7 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int,5> &running
 					running[1] += temp1->getNodes();
 					runningTotal += temp1->getNodes();
 					queues[1]->removeJob(0);
+					temp1 = queues[1]->nextJob();
 				}
 				else
 					break;
@@ -103,6 +102,7 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int,5> &running
 					running[2] += temp2->getNodes();
 					runningTotal += temp2->getNodes();
 					queues[2]->removeJob(0);
+					temp2 = queues[2]->nextJob();
 				}
 				else
 					break;
