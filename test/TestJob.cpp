@@ -19,8 +19,8 @@ void test_getter(void){
         p
     };
     Student* s = new Student(c);
-    Job j = Job(s, 1, 15, 0, 20.1);
-    TEST_ASSERT_EQUAL_HEX8(15, j.getCores());
+    Job j = Job(s, 1, 16, 0, 20.1, 25);
+    TEST_ASSERT_EQUAL_HEX8(1, j.getNodes());
 }
 
 int main(void)
