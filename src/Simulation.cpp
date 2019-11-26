@@ -2,8 +2,8 @@
 #include "Simulation.h"
 #include <iostream>
 #include <ctgmath>
-#include <sources/users/Researcher.h>
-#include <sources/users/Student.h>
+#include <src/users/Researcher.h>
+#include <src/users/Student.h>
 
 Simulation::Simulation(int totalNode) :
         currentTime(0),

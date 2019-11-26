@@ -1,4 +1,4 @@
-#include "sources/Simulation.h"
+#include "src/Simulation.h"
 #include <iostream>
 
 int main(){

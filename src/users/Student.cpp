@@ -1,5 +1,6 @@
 
 #include "Student.h"
+#include "User.cpp"
 
 Student::Student(struct Curriculum curriculum) :
         User(curriculum.expoParameter, curriculum.budget, curriculum.permission),

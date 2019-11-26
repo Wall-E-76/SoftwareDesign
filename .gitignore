@@ -2,7 +2,8 @@
 Debug/
 SoftwareDesign.v*
 SoftwareDesign.sln
-
+build/*
+unity/*
 # Prerequisites
 *.d
 
