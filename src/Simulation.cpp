@@ -8,7 +8,7 @@
 Simulation::Simulation(int totalNode) :
         currentTime(0),
         totalNode(totalNode),
-        machine(Machine(floor(totalNode*0.1), floor(totalNode*0.3), totalNode - floor(totalNode*0.1)- floor(totalNode*0.3), 8, totalNode))
+        machine(Machine())
 {
 }
 

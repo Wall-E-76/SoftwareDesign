@@ -24,6 +24,6 @@ public:
     void incrNumJobsProcessed();
     void addWaitTime(double time);
 
-    Queue(Queue *pQueue);
+
 };
 
