@@ -27,9 +27,10 @@ private:
 	int status;
     std::vector <Job*> jobsRunning;
     std::vector <Queue*> queues;
-	Scheduler& scheduler; //have it here as a reference, will need to test this and see if its right
+	Scheduler* scheduler; //have it here as a reference, will need to test this and see if its right
 public:
-	Machine(std::vector<Queue*> queues, Scheduler& schedulerArg);
+	explicit Machine(std::vector<Queue*> queues);
+	void addScheduler(Scheduler* schedulerArg);
     void checkJobsRunning(double currentTime);
     void getJobsFromScheduler(double currentTime);
     void setMachineStatus(double currentTime);

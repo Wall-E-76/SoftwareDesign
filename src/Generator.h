@@ -16,7 +16,7 @@ struct PropertyQueue {
 class Generator {
 private:
     std::vector <User*> users;
-    std::array<PropertyQueue,5> property;
+    std::array<PropertyQueue,5> property{}{};
     std::array<Queue,5> queues;
 
 public:

@@ -7,19 +7,19 @@ Generator::Generator() {
 }
 
 Generator::Generator(int totlNodes) {
-    struct PropertyQueue shortQueue;
+    struct PropertyQueue shortQueue{};
     shortQueue.coreMax = 2;
     shortQueue.timeMax = 1;
-    struct PropertyQueue medQueue;
+    struct PropertyQueue medQueue{};
     medQueue.coreMax = floor(totlNodes*0.1*16);
     medQueue.timeMax = 8;
-    struct PropertyQueue largeQueue;
+    struct PropertyQueue largeQueue{};
     largeQueue.coreMax = floor(totlNodes*0.5*16);
     largeQueue.timeMax = 16;
-    struct PropertyQueue GPUQueue;
+    struct PropertyQueue GPUQueue{};
     GPUQueue.coreMax = floor(8*16);
     GPUQueue.timeMax = 24*5; //TODO change the value to a sensible one
-    struct PropertyQueue hugeQueue;
+    struct PropertyQueue hugeQueue{};
     hugeQueue.coreMax = totlNodes*16;
     hugeQueue.timeMax = 24*3; //TODO change the value to a sensible one
 
@@ -78,15 +78,22 @@ Job Generator::createJob(int i) {
         cores = coreMax;
     else if (cores<1)
         cores = 1;
-    double runtime;
+    double reservedTime;
     double timeMax = (*this).property.at(category).timeMax;
-    std::uniform_int_distribution<int> norm(timeMax/2);
-    runtime = roundUp(norm(generator));
+    std::normal_distribution<double> norm(timeMax/2);
+    reservedTime = roundUp(norm(generator));
+    if (reservedTime>timeMax)
+        reservedTime = timeMax;
+    else if (reservedTime<2*TIMESTEP)
+        reservedTime=2*TIMESTEP;
+    double runtime;
+    std::normal_distribution<double> normRuntime(3*reservedTime/4,reservedTime/4);
+   runtime = roundUp(normRuntime(generator));
     if (runtime>timeMax)
         runtime = timeMax;
     else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
-    return {owner, category, cores, GPU, runtime, runtime+0.25};
+    return {owner, category, cores, GPU, runtime, reservedTime};
 }
 
 void Generator::check(Job *job) {

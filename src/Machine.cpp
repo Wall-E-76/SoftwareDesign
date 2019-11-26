@@ -4,7 +4,7 @@
 //comments: might not need to be linked to queue?
 // also, make sure that Job->category refers to short, med, large, gpu, and huge, in that order
 
-Machine::Machine(std::vector<Queue*> queues, Scheduler& schedulerArg) : scheduler(schedulerArg) {
+Machine::Machine(std::vector<Queue*> queues) {
 
 	running[0] = 0;
 	running[1] = 0;
@@ -13,6 +13,10 @@ Machine::Machine(std::vector<Queue*> queues, Scheduler& schedulerArg) : schedule
 	running[4] = 0;
 	runningTotal = 0;
 	this->queues = queues;
+}
+
+void Machine::addScheduler(Scheduler* schedulerArg){
+    (*this).scheduler = schedulerArg;
 }
 
 void Machine::checkJobsRunning(double currentTime) {
@@ -25,7 +29,7 @@ void Machine::checkJobsRunning(double currentTime) {
 	}
 }
 void Machine::getJobsFromScheduler(double currentTime) {
-	std::vector<Job*> toRun = scheduler.getJobs(status, running, runningTotal);
+	std::vector<Job*> toRun = scheduler->getJobs(status, running, runningTotal);
 	for (auto e : toRun) {
 		jobsRunning.push_back(e); 
 		e->setTimeLeftQueue(currentTime); //Job has left wait queue and is now started runnning
@@ -36,15 +40,15 @@ void Machine::getJobsFromScheduler(double currentTime) {
 void Machine::setMachineStatus(double currentTime) {
 
 	if (currentTime >= STATE5)
-		state = 5;
+        status = 5;
 	else if (currentTime >= STATE4)
-		state = 4;
+		status = 4;
 	else if (currentTime >= STATE3)
-		state = 3;
+		status = 3;
 	else if (currentTime >= STATE2)
-		state = 2;
+		status = 2;
 	else
-		state = 1; 
+		status = 1;
 }
 
 void Machine::collector(Job* job) {
