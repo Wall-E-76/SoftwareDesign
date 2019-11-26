@@ -4,8 +4,8 @@
 #include "Generator.h"
 #include <iostream>
 #include <ctgmath>
-#include "users/Researcher.h"
-#include "users/Student.h"
+#include "Researcher.h"
+#include "Student.h"
 
 #define TIMESTEP 0.5
 #define ENDTIME 24*14

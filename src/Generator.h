@@ -1,6 +1,6 @@
 #pragma once
 
-#include "users/User.h"
+#include "User.h"
 #include "Job.h"
 #include <vector>
 #include "Machine.h"
@@ -31,7 +31,7 @@ public:
     void addUser(User *user);
     int randomCategory(int i);
     Job createJob(int i);
-    void check(Job* job);
+    void check(Job* job, double currentTime);
     void lookForJobs(double currentTime);
     double roundUp(double time);
 };

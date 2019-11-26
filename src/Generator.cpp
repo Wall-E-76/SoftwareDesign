@@ -1,6 +1,7 @@
 
 #include "Generator.h"
 #include <random>
+#include <src/Researcher.h>
 
 Generator::Generator(int totlNodes) {
 	struct PropertyQueue shortQueue {};
@@ -100,16 +101,16 @@ Job Generator::createJob(int i) {
     return {owner, category, cores, GPU, runtime, reservedTime};
 }
 
-void Generator::check(Job *job) {
+void Generator::check(Job *job, double currentTime) {
     double priceJob;
     if (job->getCategory()==3)
         priceJob = job->getRuntime()*MACHINE_COST_GPU*job->getNodes();
     else
         priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
     double newSpending = job->getOwner()->getSpendings()+priceJob;
-    if (newSpending < job->getOwner()->getBudget()){
-        job->getOwner()->spend(newSpending);
-        (*this).queues.at(job->getCategory());
+    if (job->getOwner()->spend(newSpending)) {
+        (*this).queues.at(job->getCategory()).insertJob(job);
+        job->getOwner()->generateNewTime(currentTime);
     }
 }
 
@@ -117,9 +118,8 @@ void Generator::lookForJobs(double currentTime) {
     int n = (*this).users.size();
     for (int i=0; i<n;i++) {
         if ((*this).users.at(i)->isTime(currentTime)) {
-            (*this).users.at(i)->generateNewTime();
             Job newJob = createJob(i);
-            check(&newJob);
+            check(&newJob, currentTime);
         }
     }
 }

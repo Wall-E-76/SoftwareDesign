@@ -11,7 +11,7 @@ User::User(int expoParameter, double budget, std::array<bool,5> permission):
 }
 
 bool User::isTime(double time) {
-    return ((*this).nextJobTime-time>0);
+    return ((*this).nextJobTime-time<0);
 }
 
 double User::getBudget() {
@@ -30,15 +30,16 @@ bool User::spend(double newSpendings) {
     return false;
 }
 
-double User::generateNewTime() {
+void User::generateNewTime(double time) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::exponential_distribution<> d((*this).expoParameter);
-    return d(gen);
+    (*this).nextJobTime = time + d(gen);
 }
 
 std::array<bool,5> User::getPermission() {
     return (*this).permission;
 }
+
 
 
