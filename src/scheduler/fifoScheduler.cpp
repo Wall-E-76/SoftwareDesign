@@ -33,15 +33,13 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& runnin
 				if (temp->getNodes() + running[4] <= totalNodes) {
 					nextJobs.push_back(temp);
 					running[4] += temp->getNodes();
-					runningTotal += temp->getNodes();
+					runningTotal += temp->getNodes(); //redundant but keeping it in for consistency 
 					queues[4]->removeJob(n, currentTime);
 				}
 				else
 					break; //because next job in queue will go over resource max, so stop checking for more jobs to run
-
 			}
 		}
-
 		return nextJobs;
 
 	default:       //case for states 1-4, weekday opertaion

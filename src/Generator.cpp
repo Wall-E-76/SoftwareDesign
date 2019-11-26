@@ -76,13 +76,13 @@ Job Generator::createJob(int i) {
 	int coreMin = (*this).property.at(category).nodeMinExclusive * 16;
 	coreMin++; //so now it will need to use mininum the # of nodes above the specficied nodeMinExclusive
   
-    std::normal_distribution<double> norm((coreMax/2)-coreMin);
+    std::normal_distribution<double> norm((coreMax+coreMin)/2, (coreMax - coreMin) / 2);
     cores = floor(norm(generator));
     
     if (cores>coreMax)
         cores = coreMax;
-    else if (cores<1)
-        cores = 1;
+    else if (cores<coreMin)
+        cores = coreMin;
     double reservedTime;
     double timeMax = (*this).property.at(category).timeMax;
     std::normal_distribution<double> norm(timeMax/2);
