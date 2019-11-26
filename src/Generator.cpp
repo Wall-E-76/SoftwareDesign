@@ -86,15 +86,15 @@ Job Generator::createJob(int i) {
         runtime = timeMax;
     else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
-    return {owner, category, cores, GPU, runtime};
+    return {owner, category, cores, GPU, runtime, runtime+0.25};
 }
 
 void Generator::check(Job *job) {
     double priceJob;
     if (job->getCategory()==3)
-        priceJob = job->getRuntime()*MACHINE_COST_GPU*job->getCores();
+        priceJob = job->getRuntime()*MACHINE_COST_GPU*job->getNodes();
     else
-        priceJob = job->getRuntime()*MACHINE_COST*job->getCores();
+        priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
     double newSpending = job->getOwner()->getSpendings()+priceJob;
     if (newSpending < job->getOwner()->getBudget()){
         job->getOwner()->spend(newSpending);

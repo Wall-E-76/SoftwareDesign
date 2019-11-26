@@ -44,10 +44,7 @@ double Job::getTimeLeftQueue() {
 }
 
 bool Job::doneRunning(double time) {
-	if (timeLeftQueue + runtime <= time) 
-		return true;
-	else
-		return false;
+    return timeLeftQueue + runtime <= time;
 }
 
 void Job::setTimeLeftQueue(double time) {
