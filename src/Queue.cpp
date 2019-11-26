@@ -8,12 +8,20 @@ Queue::Queue():
 {
 }
 
+int Queue::getNumJobsProcessed() {
+    return (*this).numJobsProcessed;
+}
+
+double Queue::getTotalWaitTime() {
+    return (*this).totalWaitTime;
+}
+
 void Queue::insertJob(Job *job) {
     (*this).jobsInQueue.push_back(job);
 }
 
 Job* Queue::nextJob() {
-    if ((*this).jobsInQueue.empty()){
+    if (!(*this).jobsInQueue.empty()){
         return (*this).jobsInQueue.front();
     }
     else {
@@ -38,5 +46,9 @@ void Queue::incrNumJobsProcessed() {
 void Queue::addWaitTime(double time) {
     (*this).addWaitTime(time);
 }
+
+
+
+
 
 

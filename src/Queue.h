@@ -16,6 +16,8 @@ private:
     double totalWaitTime;
 public:
     Queue();
+    int getNumJobsProcessed();
+    double getTotalWaitTime();
     void insertJob(Job* job);
     Job* nextJob();
     void removeJob(int n);

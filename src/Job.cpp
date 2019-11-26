@@ -31,6 +31,10 @@ double Job::getRuntime() {
     return (*this).runtime;
 }
 
+double Job::getReservedTime() {
+    return (*this).reservedTime;
+}
+
 double Job::getTimeEnteredQueue() {
     return (*this).timeEnteredQueue;
 }

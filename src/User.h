@@ -14,11 +14,11 @@ protected:
 public:
     User(int expoParameter, double budget, std::array<bool,5> permission);
     bool isTime(double time);
-    double generateNewTime();
+    void generateNewTime(double time);
     virtual char whatAmI()=0;
     double getBudget();
     double getSpendings();
-    bool spend(double newSpendings);
+    virtual bool spend(double newSpendings)=0;
     std::array<bool,5> getPermission();
 };
 

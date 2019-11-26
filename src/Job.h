@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "users/User.h"
+#include "User.h"
 
 class Job {
 private:
@@ -19,6 +19,7 @@ public:
     int getNodes();
     bool needsGPU();
     double getRuntime();
+    double getReservedTime();
     double getTimeEnteredQueue();
     void setTimeEnteredQueue(double time);
     double getTimeLeftQueue();
