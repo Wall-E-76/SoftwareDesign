@@ -5,6 +5,11 @@
 
 class Scheduler {
 public:
-    Scheduler();
-    virtual void schedulerQueue(/*Queue queue*/)=0;
+	Scheduler() {} //is this necessary?
+	virtual ~Scheduler() = 0;
+	virtual std::vector<Job*> getJobs()=0;
+protected:
+
+	std::vector<Queue*> queues;
+	std::vector<Job*> nextUp;
 };

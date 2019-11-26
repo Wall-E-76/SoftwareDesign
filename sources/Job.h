@@ -6,24 +6,24 @@
 class Job {
 private:
     int category;
-    int cores;
+    int nodes;
     bool GPU;
     double runtime;
+	double reservedTime; // need to adjust code to account for this User-defined parameter
     double timeEnteredQueue;
     double timeLeftQueue;
     User* owner;
-    // May not be necessary
-    double endTime;
 public:
-    Job(User* owner, int category, int cores, bool GPU, double runtime);
+    Job(User* owner, int category, int cores, bool GPU, double runtime, double reservedTime);
     int getCategory();
-    int getCores();
+    int getNodes();
     bool needsGPU();
     double getRuntime();
     double getTimeEnteredQueue();
     void setTimeEnteredQueue(double time);
     double getTimeLeftQueue();
     void setTimeLeftQueue(double time);
+	bool doneRunning(double time);
     User* getOwner();
 };
 

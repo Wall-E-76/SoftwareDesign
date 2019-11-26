@@ -21,7 +21,7 @@ private:
 
 public:
     Generator();
-    explicit Generator(int totalNodes);
+    explicit Generator(int totlNodes);
     void addUser(User *user);
     int randomCategory(int i);
     Job createJob(int i);

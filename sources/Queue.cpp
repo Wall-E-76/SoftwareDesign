@@ -23,9 +23,9 @@ Job* Queue::nextJob() {
     }
 }
 
-void Queue::removeJob() {
-    if (!(*this).jobsInQueue.empty()){
-        (*this).jobsInQueue.erase((*this).jobsInQueue.begin());;
+void Queue::removeJob(int n) {
+    if (jobsInQueue[n]){
+        jobsInQueue.erase(jobsInQueue.begin()+n);
     }
 }
 

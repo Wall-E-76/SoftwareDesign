@@ -3,8 +3,9 @@
 #include "Scheduler.h"
 
 
-class fifoScheduler {
+class FIFOScheduler : public Scheduler{
 public:
-    void schedulerQueue(Queue queue);
+	FIFOScheduler(std::vector<Queue*> queues);
+	std::vector<Job*> getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime);
 };
 

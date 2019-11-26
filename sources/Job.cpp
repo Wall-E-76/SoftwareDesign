@@ -1,24 +1,26 @@
 
 #include "Job.h"
 
-Job::Job(User *owner, int category, int cores, bool GPU, double runtime):
+Job::Job(User *owner, int category, int cores, bool GPU, double runtime, double reservedTime):
     category(category),
-    cores(cores),
     GPU(GPU),
     runtime(runtime),
     timeLeftQueue(0),
     timeEnteredQueue(0),
     owner(owner),
-    endTime(0)
+	reservedTime(reservedTime)
 {
+	this->nodes = cores / 16;
+	if (cores % 16 != 0)
+		this->nodes++;
 }
 
 int Job::getCategory() {
     return (*this).category;
 }
 
-int Job::getCores() {
-    return (*this).cores;
+int Job::getNodes() {
+    return (*this).nodes;
 }
 
 bool Job::needsGPU() {
@@ -39,6 +41,13 @@ void Job::setTimeEnteredQueue(double time) {
 
 double Job::getTimeLeftQueue() {
     return (*this).timeLeftQueue;
+}
+
+bool Job::doneRunning(double time) {
+	if (timeLeftQueue + runtime <= time) 
+		return true;
+	else
+		return false;
 }
 
 void Job::setTimeLeftQueue(double time) {

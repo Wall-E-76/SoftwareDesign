@@ -6,21 +6,21 @@ Generator::Generator() {
      Generator(128);
 }
 
-Generator::Generator(int totalNodes) {
+Generator::Generator(int totlNodes) {
     struct PropertyQueue shortQueue;
     shortQueue.coreMax = 2;
     shortQueue.timeMax = 1;
     struct PropertyQueue medQueue;
-    medQueue.coreMax = floor(totalNodes*0.1*16);
+    medQueue.coreMax = floor(totlNodes*0.1*16);
     medQueue.timeMax = 8;
     struct PropertyQueue largeQueue;
-    largeQueue.coreMax = floor(totalNodes*0.5*16);
+    largeQueue.coreMax = floor(totlNodes*0.5*16);
     largeQueue.timeMax = 16;
     struct PropertyQueue GPUQueue;
     GPUQueue.coreMax = floor(8*16);
     GPUQueue.timeMax = 24*5; //TODO change the value to a sensible one
     struct PropertyQueue hugeQueue;
-    hugeQueue.coreMax = totalNodes*16;
+    hugeQueue.coreMax = totlNodes*16;
     hugeQueue.timeMax = 24*3; //TODO change the value to a sensible one
 
     (*this).property = {shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue};
