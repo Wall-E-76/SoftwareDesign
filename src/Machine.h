@@ -19,13 +19,18 @@ class Machine {
 private:
 
 	std::array <int, 5> running;
-	//int& runningShort= running[0];
-	//int& runningMed = running[1];
-	//int& runnningLarge = running[2];
-	//int& runningGPU = running[3];
-	//int& runningHuge = running[4];  //way to use these ref variables..? if not, not that important, can do without
 	int runningTotal;
 	int status;
+
+	std::vector<int> processedByQueue;
+	//^ num of jobs processed from each queue
+	std::vector<double> waitTimeByQueue;
+	//^total time Jobs spent waiting in each queue, avg will be this div by processedByQueue 
+	std::vector<double> turnaroundByQueue;
+	double machineHoursConsumed; 
+	//^ just add up nodes*runTime from each job
+	double pricesPaid;
+	//^ similar to machineHoursConsumed but taking into consideration user budgets spent, so GPU factor consideration
     std::vector <Job*> jobsRunning;
     std::vector <Queue*> queues;
 	Scheduler* scheduler; //have it here as a reference, will need to test this and see if its right
@@ -38,6 +43,7 @@ public:
     void getJobsFromScheduler(double currentTime);
     void setMachineStatus(double currentTime);
 	void collector(Job* job);
+	void report(double currentTime); //will return or print or send to file all the info gathered and processed in collector
 };
 
 
