@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Job.h"
-#include "scheduler/Scheduler.h"
 #include <vector>
 
 #define shortMin 14
@@ -23,7 +22,5 @@ public:
     std::vector <Job*> getJobsInQueue();
     void incrNumJobsProcessed();
     void addWaitTime(double time);
-
-
 };
 

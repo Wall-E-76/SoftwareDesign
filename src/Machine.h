@@ -3,6 +3,7 @@
 #include <array>
 #include "Job.h"
 #include "Queue.h"
+#include "scheduler/Scheduler.h"
 #define MACHINE_COST 5
 #define MACHINE_COST_GPU 6
 #define STATE1 9 //start time for state 1, so 0900 am monday

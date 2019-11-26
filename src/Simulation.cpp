@@ -1,9 +1,6 @@
 
 #include "Simulation.h"
-#include <iostream>
-#include <ctgmath>
-#include <src/users/Researcher.h>
-#include <src/users/Student.h>
+
 
 Simulation::Simulation(int totalNode) :
         currentTime(0),
@@ -14,7 +11,7 @@ Simulation::Simulation(int totalNode) :
 
 void Simulation::setup() {
     std::cout << "Beginning of setup"<< std::endl;
-    Generator((*this).totalNode);
+    Generator g = Generator((*this).totalNode);
     std::vector <struct Group> groups;
     std::string answer;
     std::array <std::string,5> arrayCategory = {"short","medium", "large", "GPU", "huge"};

@@ -16,7 +16,7 @@ private:
     int instResourceCap;
 
 public:
-    Student(struct Curriculum curriculum);
+    explicit Student(struct Curriculum curriculum);
     char whatAmI() override;
     int getInstResourceCapt();
 };
