@@ -4,6 +4,10 @@
 #include "../Queue.h"
 #include <vector>
 
+#define WEEKENDCUTOFF 113
+#define WEEKDAYCUTOFF 9
+#define MAX_DOUBLE 9999.99
+
 
 class Scheduler {
 public:

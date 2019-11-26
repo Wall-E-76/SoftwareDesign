@@ -15,6 +15,10 @@ Job::Job(User *owner, int category, int cores, bool GPU, double runtime, double 
 		this->nodes++;
 }
 
+double Job::getReservedTime() {
+	return reservedTime;
+}
+
 int Job::getCategory() {
     return (*this).category;
 }

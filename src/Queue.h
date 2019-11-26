@@ -18,7 +18,9 @@ public:
     Queue();
     void insertJob(Job* job);
     Job* nextJob();
-    void removeJob(int n);
+	int nextJobT(double time);
+    void removeJob(int n, double currentTime);
+	Job* getJobAt(int n);
     std::vector <Job*> getJobsInQueue();
     void incrNumJobsProcessed();
     void addWaitTime(double time);

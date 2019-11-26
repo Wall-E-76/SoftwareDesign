@@ -2,36 +2,42 @@
 #include "Generator.h"
 #include <random>
 
-Generator::Generator() {
-     Generator(128);
-}
-
 Generator::Generator(int totlNodes) {
-    struct PropertyQueue shortQueue{};
-    shortQueue.coreMax = 2;
-    shortQueue.timeMax = 1;
-    struct PropertyQueue medQueue{};
-    medQueue.coreMax = floor(totlNodes*0.1*16);
-    medQueue.timeMax = 8;
-    struct PropertyQueue largeQueue{};
-    largeQueue.coreMax = floor(totlNodes*0.5*16);
-    largeQueue.timeMax = 16;
-    struct PropertyQueue GPUQueue{};
-    GPUQueue.coreMax = floor(8*16);
-    GPUQueue.timeMax = 24*5; //TODO change the value to a sensible one
-    struct PropertyQueue hugeQueue{};
-    hugeQueue.coreMax = totlNodes*16;
-    hugeQueue.timeMax = 24*3; //TODO change the value to a sensible one
+	struct PropertyQueue shortQueue {};
+	shortQueue.nodeMax = SHORTMAXNODES;
+	shortQueue.nodeMinExclusive = 0;
+	shortQueue.timeMax = 1;
+	struct PropertyQueue medQueue {};
+	medQueue.nodeMax = MEDIUMMAXNODES;
+	medQueue.nodeMinExclusive = SHORTMAXNODES;
+	medQueue.timeMax = 8;
+	struct PropertyQueue largeQueue {};
+	largeQueue.nodeMax = LARGEMAXNODES;
+	largeQueue.nodeMinExclusive = MEDIUMMAXNODES;
+	largeQueue.timeMax = 16;
+	struct PropertyQueue GPUQueue {};
+	GPUQueue.nodeMax = GPUMAXNODES;
+	GPUQueue.nodeMinExclusive = 0;
+	GPUQueue.timeMax = 8; //TODO change the value to a sensible one
+	struct PropertyQueue hugeQueue {};
+	hugeQueue.nodeMax = HUGEMAXNODES;
+	hugeQueue.nodeMinExclusive = 15; //lets say Huge jobs cant run jobs  on fewer than 16 nodes
+	hugeQueue.timeMax = 64; //TODO change the value to a sensible one
 
-    (*this).property = {shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue};
+	(*this).property = { shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue };
 }
+
+Generator::Generator() {
+     Generator(128); //legal?
+}
+
 
 void Generator::addUser(User *user) {
     (*this).users.push_back(user);
 }
 
 int Generator::randomCategory(int i) {
-    int sum;
+    int sum=0;
     // We find the number of possible category
     std::array<bool,5> permission = (*this).users.at(i)->getPermission();
     for (int j = 0; j<5; j++){
@@ -65,15 +71,13 @@ Job Generator::createJob(int i) {
     std::random_device rd{};
     std::mt19937 generator{rd()};
     int cores;
-    int coreMax = (*this).property.at(category).coreMax;
-    if (GPU){
-        std::normal_distribution<double> norm(8*16/2);
-        cores = floor(norm(generator));
-    }
-    else {
-        std::normal_distribution<double> norm(coreMax/2);
-        cores = floor(norm(generator));
-    }
+    int coreMax = (*this).property.at(category).nodeMax*16;
+	int coreMin = (*this).property.at(category).nodeMinExclusive * 16;
+	coreMin++; //so now it will need to use mininum the # of nodes above the specficied nodeMinExclusive
+  
+    std::normal_distribution<double> norm((coreMax/2)-coreMin);
+    cores = floor(norm(generator));
+    
     if (cores>coreMax)
         cores = coreMax;
     else if (cores<1)
@@ -122,7 +126,7 @@ void Generator::lookForJobs(double currentTime) {
 
 double Generator::roundUp(double time){
     double a = time - floor(time);
-    double b = floor(a/b);
+    double b = floor(a/TIMESTEP);
     double c = a - b;
     double roundUp =  a+ b*TIMESTEP;
     if (c > TIMESTEP/2){

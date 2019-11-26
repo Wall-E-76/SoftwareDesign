@@ -7,9 +7,15 @@
 #include "Queue.h"
 #define TIMESTEP 0.5
 #define ENDTIME 24*14
+#define SHORTMAXNODES 2
+#define MEDIUMMAXNODES 12
+#define LARGEMAXNODES 64
+#define GPUMAXNODES 10
+#define HUGEMAXNODES 128
 
 struct PropertyQueue {
-    int coreMax;
+    int nodeMax;
+	int nodeMinExclusive;
     int timeMax;
 };
 

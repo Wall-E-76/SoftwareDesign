@@ -10,9 +10,11 @@ Machine::Machine() {
     running[3] = 0;
     running[4] = 0;
     runningTotal = 0;
+	status = -1; // added these, not sure if right
+	scheduler = nullptr; //^^
 }
 
-Machine::Machine(std::vector<Queue*> *queues, Scheduler* schedulerArg): scheduler(schedulerArg) {
+Machine::Machine(std::vector<Queue*> queues, Scheduler* schedulerArg): scheduler(schedulerArg) {
 
 	running[0] = 0;
 	running[1] = 0;
@@ -27,7 +29,7 @@ void Machine::addScheduler(Scheduler* schedulerArg){
     (*this).scheduler = schedulerArg;
 }
 
-void Machine::addQueues(std::vector<Queue*> *queues){
+void Machine::addQueues(std::vector<Queue*> queues){
     (*this).queues = queues;
 }
 

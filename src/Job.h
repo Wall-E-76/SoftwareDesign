@@ -19,6 +19,7 @@ public:
     int getNodes();
     bool needsGPU();
     double getRuntime();
+	double getReservedTime();
     double getTimeEnteredQueue();
     void setTimeEnteredQueue(double time);
     double getTimeLeftQueue();
