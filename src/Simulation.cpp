@@ -2,11 +2,12 @@
 #include "Simulation.h"
 
 
-Simulation::Simulation(int totalNode) :
+Simulation::Simulation(int totalNode, int weeks) :
         currentTime(0),
         totalNode(totalNode),
         machine(Machine()),
-		weeks(0)
+		weekCounter(0),
+		weeksSimulated(weeks)
 {
 
 	Queue* Short = new Queue();
@@ -17,6 +18,7 @@ Simulation::Simulation(int totalNode) :
 
 	queues[0] = Short; queues[1] = Medium; queues[2] = Large; queues[3] = GPU; queues[4] = Huge;
 
+	mainProgram(); //calls main program?
 }
 
 void Simulation::setup() {
@@ -24,7 +26,8 @@ void Simulation::setup() {
     Generator g = Generator((*this).totalNode);
 	g.addQueues(queues);
 	machine.addQueues(queues);
-	Simulation* fifo = new FIFOSchdeuler
+	Scheduler* fifo = new FIFOScheduler(queues);
+	machine.addScheduler(fifo);
 	std::vector <struct Group> groups;
     std::string answer;
     std::array <std::string,5> arrayCategory = {"short","medium", "large", "GPU", "huge"};
@@ -105,11 +108,28 @@ void Simulation::setup() {
 void Simulation::computeTimeSteps() {
     while (currentTime < double(ENDTIME)){
         generator.lookForJobs(currentTime);
-
-
-
+		machine.setMachineStatus(currentTime);
+		machine.checkJobsRunning(currentTime);
+		machine.getJobsFromScheduler(currentTime);
+		//I think that's all?
 		currentTime += TIMESTEP;
     }
+}
+
+void Simulation::output() {
+
+	(*this).machine.report();
+	(*this).machine.report();
+}
+
+void Simulation::mainProgram() {
+	(*this).setup();
+	while (weekCounter < weeksSimulated) {
+		(*this).computeTimeSteps();
+		(*this).output();
+		weekCounter++;
+	}
+
 }
 
 

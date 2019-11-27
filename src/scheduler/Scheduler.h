@@ -11,7 +11,7 @@
 
 class Scheduler {
 public:
-	Scheduler(std::array<Queue*, 5> queues) {} //is this necessary?
+	Scheduler() {} //is this necessary?
 	//virtual ~Scheduler() = 0;
 	virtual std::vector<Job*> getJobs(int status, std::array <int,5> &running, int &runningTotal, double currentTime)=0;
 	
