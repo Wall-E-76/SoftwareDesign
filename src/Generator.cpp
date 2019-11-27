@@ -19,19 +19,25 @@ Generator::Generator(int totlNodes) {
 	struct PropertyQueue GPUQueue {};
 	GPUQueue.nodeMax = GPUMAXNODES;
 	GPUQueue.nodeMinExclusive = 0;
-	GPUQueue.timeMax = 8; //TODO change the value to a sensible one
+	GPUQueue.timeMax = 8;
 	struct PropertyQueue hugeQueue {};
 	hugeQueue.nodeMax = HUGEMAXNODES;
 	hugeQueue.nodeMinExclusive = 15; //lets say Huge jobs cant run jobs  on fewer than 16 nodes
-	hugeQueue.timeMax = 64; //TODO change the value to a sensible one
+	hugeQueue.timeMax = 64;
 
 	(*this).property = { shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue };
 }
 
-Generator::Generator() {
-     Generator(128); //legal?
+Generator::Generator(): Generator(128) {
 }
 
+std::vector<User *> Generator::getUsers() {
+    return (*this).users;
+}
+
+std::array<PropertyQueue,5> Generator::getProperty() {
+    return (*this).property;
+}
 
 void Generator::addUser(User *user) {
     (*this).users.push_back(user);
@@ -42,7 +48,7 @@ int Generator::randomCategory(int i) {
     // We find the number of possible category
     std::array<bool,5> permission = (*this).users.at(i)->getPermission();
     for (int j = 0; j<5; j++){
-        if(permission.at(i)) sum++;
+        if(permission.at(j)) sum++;
     }
     // Among the possible categories, we choose one randomly
     std::random_device rd;
@@ -54,7 +60,7 @@ int Generator::randomCategory(int i) {
     //We translate the random number into the real category number
     int category = -1;
     while (random_integer>0){
-        if (permission.at(category)) {
+        if (permission.at(category+1)) {
             random_integer--;
         }
         category++;
@@ -85,8 +91,8 @@ Job Generator::createJob(int i) {
         cores = coreMin;
     double reservedTime;
     double timeMax = (*this).property.at(category).timeMax;
-    std::normal_distribution<double> norm(timeMax/2);
-    reservedTime = roundUp(norm(generator));
+    std::normal_distribution<double> normTime(timeMax/2);
+    reservedTime = roundUp(normTime(generator));
     if (reservedTime>timeMax)
         reservedTime = timeMax;
     else if (reservedTime<2*TIMESTEP)
@@ -109,7 +115,7 @@ void Generator::check(Job *job, double currentTime) {
         priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
     double newSpending = job->getOwner()->getSpendings()+priceJob;
     if (job->getOwner()->spend(newSpending)) {
-        (*this).queues.at(job->getCategory()).insertJob(job);
+        (*this).queues.at(job->getCategory())->insertJob(job);
         job->getOwner()->generateNewTime(currentTime);
     }
 }
@@ -134,6 +140,8 @@ double Generator::roundUp(double time){
     }
     return roundUp;
 }
+
+
 
 
 

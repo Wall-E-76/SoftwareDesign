@@ -22,8 +22,8 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& runnin
 			int n = 0;
 			while (running[4] < totalNodes) {
 				Job* temp = queues[4]->nextJob();
-				if (temp->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-					n = queues[4]->nextJobT(WEEKENDCUTOFF - currentTime);
+				if (temp->getReservedTime() + currentTime > WEEKDAYCUTOFF) {
+					n = queues[4]->nextJobT(WEEKDAYCUTOFF - currentTime);
 					if (n > 0) {
 						temp = queues[4]->getJobAt(n);
 					}

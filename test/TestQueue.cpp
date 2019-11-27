@@ -1,5 +1,5 @@
 #include "../unity/src/unity.h"
-#include "../src/Job.h"
+#include "../src/Job.cpp"
 #include "src/Queue.h"
 
 void setUp(){}
@@ -31,9 +31,10 @@ void test_removeJob(void){
     q->insertJob(j1);
     Job* j2;
     q->insertJob(j2);
-    q->removeJob(0);
+    q->removeJob(0,0.2);
     TEST_ASSERT_EQUAL_INT(1,q->getJobsInQueue().size());
     TEST_ASSERT(j2 == q->getJobsInQueue()[0]);
+    TEST_ASSERT_EQUAL_INT(0.2,j1->getTimeLeftQueue());
 }
 
 void test_numJobsProcessed(void){
@@ -44,6 +45,7 @@ void test_numJobsProcessed(void){
 }
 
 void test_waitTime(void){
+    TEST_ASSERT(true);
     Queue* q = new Queue();
     TEST_ASSERT_EQUAL_FLOAT(0, q->getTotalWaitTime());
     q->addWaitTime(30.2);

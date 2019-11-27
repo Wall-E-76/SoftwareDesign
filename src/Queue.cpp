@@ -45,7 +45,7 @@ void Queue::incrNumJobsProcessed() {
 }
 
 void Queue::addWaitTime(double time) {
-    (*this).addWaitTime(time);
+    (*this).totalWaitTime += time;
 }
 
 Job* Queue::getJobAt(int n) {

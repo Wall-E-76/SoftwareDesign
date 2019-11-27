@@ -23,11 +23,13 @@ class Generator {
 private:
     std::vector <User*> users;
     std::array<PropertyQueue,5> property;
-    std::array<Queue,5> queues;
+    std::array<Queue*,5> queues;
 
 public:
     Generator();
     explicit Generator(int totlNodes);
+    std::vector <User*> getUsers();
+    std::array<PropertyQueue,5> getProperty();
     void addUser(User *user);
     int randomCategory(int i);
     Job createJob(int i);

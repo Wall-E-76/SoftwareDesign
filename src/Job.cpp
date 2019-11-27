@@ -16,7 +16,7 @@ Job::Job(User *owner, int category, int cores, bool GPU, double runtime, double 
 }
 
 double Job::getReservedTime() {
-	return reservedTime;
+	return (*this).reservedTime;
 }
 
 int Job::getCategory() {
@@ -33,10 +33,6 @@ bool Job::needsGPU() {
 
 double Job::getRuntime() {
     return (*this).runtime;
-}
-
-double Job::getReservedTime() {
-    return (*this).reservedTime;
 }
 
 double Job::getTimeEnteredQueue() {
