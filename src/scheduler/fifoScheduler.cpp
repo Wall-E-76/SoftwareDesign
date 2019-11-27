@@ -6,126 +6,96 @@ FIFOScheduler::FIFOScheduler(std::vector<Queue*> queues) {
 	this->queues = queues;
 }
 
+std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int status, int statusCheck,int cutoffTime, double currentTime, int limitNodes) {
+
+	std::vector<Job*> nextJobs; 
+
+	//first checks if the number of nodes running for this type of job is less than its limit
+	if (running < limitNodes) {
+		//if so, we will try to fill the remaining reserved space on the machine for this type of job
+		int n = 0;
+		//while there is still space, will keep trying to fill it
+		while (running < limitNodes) {
+			//initially set the temp job to the first in its queue type
+			Job* temp = queue->nextJob();
+			//if its a nullptr, this queue is emptpy so break will take us to the end of the method
+			if (temp == nullptr) break;
+			//check if the current machine status is greater than or equal to the state that will require us to consider job times
+			if (status >= statusCheck) {
+				//if the reserved time of the first job in the queue will cause us to go over cutoffTime, this job will need to wait till next week, so in the meantime
+				//we will check if any other jobs in this queue can fill the reserved space
+				if (temp->getReservedTime() + currentTime > cutoffTime) {
+					//we will check the queue with nextJobT for the position of the next job in line that can run in the time available
+					n = queue->nextJobT(cutoffTime - currentTime);
+					//if we find one, make temp Job equal to this job at position n in the queue
+					if (n > 0) {
+						temp = queue->getJobAt(n);
+					}
+					//if nextJobT returns -1, that means no job in the queue can run in the amount of time left, so we break because no jobs can fill the space this turn
+					else
+						break;
+				}
+			}
+			//check the node requirements for our temp job to see if it will cause us to go over the limit for this job type
+			if (temp->getNodes() + running <= limitNodes) {
+				//if it dosent, we add it to our list and increment the running attribute values, then remove it from the queue
+				nextJobs.push_back(temp);
+				running += temp->getNodes();
+				runningTotal += temp->getNodes();
+				queue->removeJob(n, currentTime);
+			}
+			else
+				break;
+		}
+	}
+	return nextJobs;
+}
+
+Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int status, int statusCheck, double cutoffTime, int queue, double currentTime) {
+
+	Job* temp = queues[queue]->nextJob();
+	bool flag = false;
+	if (status >= statusCheck) {
+		if (temp->getReservedTime() + currentTime > cutoffTime) {
+			//next job in this queue can't be run, so lets check for others
+			n = queues[queue]->nextJobT(cutoffTime - currentTime);
+			if (n > 0)
+				temp = queues[queue]->getJobAt(n);
+			else
+				flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
+		}
+	}
+	if (temp->getTimeEnteredQueue() < oldestTime && flag == false) {
+		oldestTime = temp->getTimeEnteredQueue();
+		oldest = queue;
+	}
+	return temp;
+}
+
 std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime) {
-
-	std::vector<Job*> nextJobs;
-
-	//have only done case 1 so far,
-	//will have it so there is a case for state 5, weekend mode, and then the other case for weekdays but
-	//need to have if statements each time to check to see what state it is and if it needsto check time and look at next one in queue..
 
 	switch (status) {
 
 	case 5:           //case for state 5, weekend opeteration
 
-		if (running[4] < totalNodes) {
-			int n = 0;
-			while (running[4] < totalNodes) {
-				Job* temp = queues[4]->nextJob();
-				if (temp->getReservedTime() + currentTime > WEEKDAYCUTOFF) {
-					n = queues[4]->nextJobT(WEEKDAYCUTOFF - currentTime);
-					if (n > 0) {
-						temp = queues[4]->getJobAt(n);
-					}
-					else
-						break; //means no more jobs in the queue can be run at this time
-				}
-				if (temp->getNodes() + running[4] <= totalNodes) {
-					nextJobs.push_back(temp);
-					running[4] += temp->getNodes();
-					runningTotal += temp->getNodes(); //redundant but keeping it in for consistency 
-					queues[4]->removeJob(n, currentTime);
-				}
-				else
-					break; //because next job in queue will go over resource max, so stop checking for more jobs to run
-			}
-		}
-		return nextJobs;
+		return fillReserved(running[4], runningTotal, queues[4], status, 5, WEEKDAYCUTOFF, currentTime, totalNodes);
 
 	default:       //case for states 1-4, weekday opertaion
-		if (running[0] < shortMin) {
-			int n = 0;
-			while (running[0] < shortMin) {
-				Job* temp = queues[0]->nextJob();
-				if (temp == nullptr) break;
-				if (status == 4) {
-					if (temp->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-						n = queues[0]->nextJobT(WEEKENDCUTOFF - currentTime);
-						if (n > 0) {
-							temp = queues[0]->getJobAt(n);
-						}
-						else
-							break; //else, we break out because no more jobs can be run in time
-					}
-				}
-				if (temp->getNodes() + running[0] <= shortMin) {
-					nextJobs.push_back(temp);
-					running[0] += temp->getNodes();
-					runningTotal += temp->getNodes();
-					queues[0]->removeJob(n, currentTime);
-				}
-				else
-					break; //because next job will go over, so leave while loop and continue on
-			}
-		}
-		if (running[1] < medMin) {
-			int n = 0;
-			while (running[1] < medMin) {
-				Job* temp = queues[1]->nextJob();
-				if (temp == nullptr) break;
-				if (status == 3) {
-					if (temp->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-						n = queues[1]->nextJobT(WEEKENDCUTOFF - currentTime);
-						if (n > 0) {
-							temp = queues[1]->getJobAt(n);
-						}
-						else
-							break;
-					}
-				}
-				if (temp->getNodes() + running[1] <= medMin) {
-					nextJobs.push_back(temp);
-					running[1] += temp->getNodes();
-					runningTotal += temp->getNodes();
-					queues[1]->removeJob(n, currentTime);
-				}
-				else
-					break;
-			}
-		}
-		if (running[3] < gpuNodes) {
-			int n = 0; //position in queue of job being looked at, default 0 but might change for time constraint case
-			while (running[3] < gpuNodes) {
-				Job* temp = queues[3]->nextJob();
-				if (temp == nullptr) break; //means there are no more jobs in this queue, so we break out
-				if (status == 3) {
-					//if its status 3, we need to check times of jobs
-					//so, we check if the first job in the gpu queue goes will go over our cutoff 
-					if (temp->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-						// if it, does, we will check to see if any other jobs in the GPU queue can run in time
-						n = queues[3]->nextJobT(WEEKENDCUTOFF - currentTime);
-						if (n > 0) {
-							//if we find one, we make it the new temp
-							temp = queues[3]->getJobAt(n);
-						}
-						else
-							break; //else, we break out because no more jobs can be run in time
-					}
-				}
-				if (temp->getNodes() + running[3] <= gpuNodes) {
-					nextJobs.push_back(temp);
-					running[3] += temp->getNodes();
-					runningTotal += temp->getNodes();
-					queues[3]->removeJob(n, currentTime);
-				}
-				else
-					break;
-			}
-		}
 
-		Job* temp0 = queues[0]->nextJob(); //short
-		Job* temp1 = queues[1]->nextJob(); //medium
-		Job* temp2 = queues[2]->nextJob(); //large jobs
+		std::vector<Job*> nextJobs;
+		std::vector<Job*> temp;
+
+		temp = fillReserved(running[0], runningTotal, queues[0], status, 4, WEEKENDCUTOFF, currentTime, shortMin);
+
+		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
+
+		temp = fillReserved(running[1], runningTotal, queues[1], status, 3, WEEKENDCUTOFF, currentTime, medMin);
+
+		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
+
+		temp = fillReserved(running[3], runningTotal, queues[3], status, 3, WEEKENDCUTOFF, currentTime, gpuNodes);
+		
+		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
 		while (runningTotal - running[3] < totalNodes - gpuNodes) {
 
@@ -133,59 +103,11 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& runnin
 			int oldest = 3; //queues index of oldest job, initialized to unreachable value
 			int nShort = 0; int nMedium = 0; int nLarge = 0;
 
-			if (temp0 != nullptr) {
-				bool flag = false;
-				if (status == 4) {
-					if (temp0->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-						//next job in this queue can't be run, so lets check for others
-						nShort = queues[0]->nextJobT(WEEKENDCUTOFF - currentTime);
-						if (nShort > 0) {
-							temp0 = queues[0]->getJobAt(nShort);
-						}
-						else
-							flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
-					}
-				}
-				if (temp0->getTimeEnteredQueue() < oldestTime && flag == false) {
-					oldestTime = temp0->getTimeEnteredQueue();
-					oldest = 0;
-				}
-			}
-			if (temp1 != nullptr) {
-				bool flag = false;
-				if (status == 3) {
-					if (temp1->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-						nMedium = queues[1]->nextJobT(WEEKENDCUTOFF - currentTime);
-						if (nMedium > 0) {
-							temp1 = queues[1]->getJobAt(nMedium);
-						}
-						else
-							flag = true;
-					}
-				}
-				if (temp1->getTimeEnteredQueue() < oldestTime && flag == false) {
-					oldestTime = temp1->getTimeEnteredQueue();
-					oldest = 1;
-				}
-			}
+			Job* temp0 = oldestCheck(oldest, oldestTime, nShort, status, 4, WEEKENDCUTOFF, 0, currentTime);
 
-			if (temp2 != nullptr) {
-				bool flag = false;
-				if (status == 2) {
-					if (temp2->getReservedTime() + currentTime > WEEKENDCUTOFF) {
-						nLarge = queues[2]->nextJobT(WEEKENDCUTOFF - currentTime);
-						if (nLarge > 0) {
-							temp2 = queues[2]->getJobAt(nLarge);
-						}
-						else
-							flag = true;
-					}
-				}
-				if (temp2->getTimeEnteredQueue() < oldestTime && flag == false) {
-					oldestTime = temp2->getTimeEnteredQueue();
-					oldest = 2;
-				} //finds the oldest job in the three main queues
-			}
+			Job* temp1 = oldestCheck(oldest, oldestTime, nMedium, status, 3, WEEKENDCUTOFF, 1, currentTime);
+
+			Job* temp2 = oldestCheck(oldest, oldestTime, nLarge, status, 2, WEEKENDCUTOFF, 2, currentTime);
 
 			if (temp0 == nullptr && temp1 == nullptr && temp2 == nullptr)
 				break; //if there are no more jobs that can be run next, break out from scheduler

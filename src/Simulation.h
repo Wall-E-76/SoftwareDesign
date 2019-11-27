@@ -15,9 +15,6 @@ class Simulation {
 private:
     int totalNode;
     double currentTime;
-    int machineHours;
-    int resultingPrice;
-    double totalTurnAroundTimeRatio;
     Generator generator;
     Machine machine;
 
@@ -26,8 +23,5 @@ public:
     void setup();
     void computeTimeSteps();
     void output();
-    void addMachineHours(Job job);
-    void addResultingPrice(Job job);
-    void addTurnAroungRatio(Job job);
 };
 

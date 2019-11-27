@@ -24,6 +24,7 @@ public:
     void setTimeEnteredQueue(double time);
     double getTimeLeftQueue();
     void setTimeLeftQueue(double time);
+	double getWaitTime();
 	bool doneRunning(double time);
     User* getOwner();
 };

@@ -4,8 +4,8 @@
 #include "../Queue.h"
 #include <vector>
 
-#define WEEKENDCUTOFF 113
-#define WEEKDAYCUTOFF 9
+#define WEEKENDCUTOFF 104
+#define WEEKDAYCUTOFF 168 //end of week
 #define MAX_DOUBLE 9999.99
 
 

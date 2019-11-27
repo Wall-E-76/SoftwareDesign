@@ -47,6 +47,10 @@ double Job::getTimeLeftQueue() {
     return (*this).timeLeftQueue;
 }
 
+double Job::getWaitTime() {
+	return (*this).timeLeftQueue-(*this).timeEnteredQueue;
+}
+
 bool Job::doneRunning(double time) {
     return timeLeftQueue + runtime <= time;
 }
