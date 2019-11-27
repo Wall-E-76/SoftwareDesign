@@ -39,9 +39,18 @@ std::array<PropertyQueue,5> Generator::getProperty() {
     return (*this).property;
 }
 
+std::array<Queue *, 5> Generator::getQueues() {
+    return (*this).queues;
+}
+
 void Generator::addUser(User *user) {
     (*this).users.push_back(user);
 }
+
+void Generator::addQueues(std::array<Queue*,5> queues) {
+    (*this).queues = queues;
+}
+
 
 int Generator::randomCategory(int i) {
     int sum=0;
@@ -134,12 +143,14 @@ double Generator::roundUp(double time){
     double a = time - floor(time);
     double b = floor(a/TIMESTEP);
     double c = a - b;
-    double roundUp =  a+ b*TIMESTEP;
-    if (c > TIMESTEP/2){
+    double roundUp = time - a+ b*TIMESTEP;
+    if (c >= TIMESTEP/2){
         roundUp += TIMESTEP;
     }
     return roundUp;
 }
+
+
 
 
 

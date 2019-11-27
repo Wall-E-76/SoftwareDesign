@@ -5,6 +5,7 @@
 #include <vector>
 #include "Machine.h"
 #include "Queue.h"
+#include <array>
 #define TIMESTEP 0.5
 #define ENDTIME 24*14
 #define SHORTMAXNODES 2
@@ -30,6 +31,8 @@ public:
     explicit Generator(int totlNodes);
     std::vector <User*> getUsers();
     std::array<PropertyQueue,5> getProperty();
+    std::array<Queue*,5> getQueues();
+    void addQueues(std::array<Queue*,5> queue);
     void addUser(User *user);
     int randomCategory(int i);
     Job createJob(int i);
