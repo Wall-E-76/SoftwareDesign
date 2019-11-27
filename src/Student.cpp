@@ -17,9 +17,11 @@ int Student::getInstResourceCapt() {
 }
 
 bool Student::spend(double newSpendings) {
-    if ((*this).spendings+newSpendings < (*this).budget){
-        (*this).spendings += newSpendings;
-        return true;
+    if ((*this).spendings+newSpendings < (*this).budget) {
+        if (newSpendings < (*this).getInstResourceCapt()) {
+            (*this).spendings += newSpendings;
+            return true;
+        }
     }
     return false;
 }

@@ -35,7 +35,7 @@ public:
     void addQueues(std::array<Queue*,5> queue);
     void addUser(User *user);
     int randomCategory(int i);
-    Job createJob(int i);
+    Job* createJob(int i);
     void check(Job* job, double currentTime);
     void lookForJobs(double currentTime);
     double roundUp(double time);

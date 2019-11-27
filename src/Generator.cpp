@@ -2,6 +2,7 @@
 #include "Generator.h"
 #include <random>
 #include <src/Researcher.h>
+#include <iostream>
 
 Generator::Generator(int totlNodes) {
 	struct PropertyQueue shortQueue {};
@@ -77,7 +78,7 @@ int Generator::randomCategory(int i) {
     return category;
 }
 
-Job Generator::createJob(int i) {
+Job* Generator::createJob(int i) {
     User *owner;
     owner = (*this).users.at(i);
     int category = (*this).randomCategory(i);
@@ -113,7 +114,7 @@ Job Generator::createJob(int i) {
         runtime = timeMax;
     else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
-    return {owner, category, cores, GPU, runtime, reservedTime};
+    return new Job(owner, category, cores, GPU, runtime, reservedTime);
 }
 
 void Generator::check(Job *job, double currentTime) {
@@ -124,17 +125,21 @@ void Generator::check(Job *job, double currentTime) {
         priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
     double newSpending = job->getOwner()->getSpendings()+priceJob;
     if (job->getOwner()->spend(newSpending)) {
+        std::cout <<"Bla"<<std::endl;
         (*this).queues.at(job->getCategory())->insertJob(job);
         job->getOwner()->generateNewTime(currentTime);
     }
+    /*else {
+        delete job;
+    }*/
 }
 
 void Generator::lookForJobs(double currentTime) {
     int n = (*this).users.size();
     for (int i=0; i<n;i++) {
         if ((*this).users.at(i)->isTime(currentTime)) {
-            Job newJob = createJob(i);
-            check(&newJob, currentTime);
+            Job* newJob = (*this).createJob(i);
+            (*this).check(newJob, currentTime);
         }
     }
 }

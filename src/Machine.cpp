@@ -82,7 +82,7 @@ void Machine::collector(Job* job) {
 	
 	processedByQueue[job->getCategory()]++;
 		
-	waitTimeByQueue[job->getCategory()] += job->getWaitTime;
+	waitTimeByQueue[job->getCategory()] += job->getWaitTime();
 
 	turnaroundRatiosSummed += (job->getWaitTime() + job->getRuntime()) / job->getRuntime();
 
