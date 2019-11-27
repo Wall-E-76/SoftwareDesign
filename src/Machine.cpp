@@ -18,7 +18,7 @@ Machine::Machine() {
 	scheduler = nullptr; //^^
 }
 
-Machine::Machine(std::vector<Queue*> queues, Scheduler* schedulerArg): scheduler(schedulerArg) {
+Machine::Machine(std::array<Queue*,5> queues, Scheduler* schedulerArg): scheduler(schedulerArg) {
 
 	for (int i = 0; i < 5; i++) {
 		running[i] = 0;
@@ -37,7 +37,7 @@ void Machine::addScheduler(Scheduler* schedulerArg){
     (*this).scheduler = schedulerArg;
 }
 
-void Machine::addQueues(std::vector<Queue*> queues){
+void Machine::addQueues(std::array<Queue*,5> queues){
     (*this).queues = queues;
 }
 
@@ -82,7 +82,7 @@ void Machine::collector(Job* job) {
 	
 	processedByQueue[job->getCategory()]++;
 		
-	waitTimeByQueue[job->getCategory()] += job->getWaitTime;
+	waitTimeByQueue[job->getCategory()] += job->getWaitTime();
 
 	turnaroundRatiosSummed += (job->getWaitTime() + job->getRuntime()) / job->getRuntime();
 
@@ -106,7 +106,11 @@ void Machine::report() {
 		totalJobsProcessed += processedByQueue[i];
 	}
 
-	double utilizationRatio = machineHoursConsumed / (WEEKDAYCUTOFF * totalNodes);
+	double machineCost = WEEKENDCUTOFF * (totalNodes - gpuNodes) * MACHINE_COST;
+	machineCost+= WEEKENDCUTOFF * (gpuNodes) * MACHINE_COST_GPU;
+	machineCost += (WEEKDAYCUTOFF - WEEKENDCUTOFF) * totalNodes * MACHINE_COST;
+
+	double utilizationRatio = machineHoursConsumed / (double(WEEKDAYCUTOFF) * totalNodes);
 
 	double averageTurnaroundRatio = turnaroundRatiosSummed / totalJobsProcessed;
 

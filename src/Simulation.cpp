@@ -5,14 +5,27 @@
 Simulation::Simulation(int totalNode) :
         currentTime(0),
         totalNode(totalNode),
-        machine(Machine())
+        machine(Machine()),
+		weeks(0)
 {
+
+	Queue* Short = new Queue();
+	Queue* Medium = new Queue();
+	Queue* Large = new Queue();
+	Queue* GPU = new Queue();
+	Queue* Huge = new Queue();
+
+	queues[0] = Short; queues[1] = Medium; queues[2] = Large; queues[3] = GPU; queues[4] = Huge;
+
 }
 
 void Simulation::setup() {
     std::cout << "Beginning of setup"<< std::endl;
     Generator g = Generator((*this).totalNode);
-    std::vector <struct Group> groups;
+	g.addQueues(queues);
+	machine.addQueues(queues);
+	Simulation* fifo = new FIFOSchdeuler
+	std::vector <struct Group> groups;
     std::string answer;
     std::array <std::string,5> arrayCategory = {"short","medium", "large", "GPU", "huge"};
     do {
@@ -90,11 +103,12 @@ void Simulation::setup() {
 }
 
 void Simulation::computeTimeSteps() {
-    while ((*this).currentTime < ENDTIME){
-        (*this).generator.lookForJobs((*this).currentTime);
-        //(*this).machine.setMachineStatus();
-        //(*this).machine.checkJobsRunning();
-        //(*this).machine.checkAvailability();
+    while (currentTime < double(ENDTIME)){
+        generator.lookForJobs(currentTime);
+
+
+
+		currentTime += TIMESTEP;
     }
 }
 

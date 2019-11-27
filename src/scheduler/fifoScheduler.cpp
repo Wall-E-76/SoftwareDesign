@@ -2,7 +2,7 @@
 #include "fifoScheduler.h"
 
 
-FIFOScheduler::FIFOScheduler(std::vector<Queue*> queues) {
+FIFOScheduler::FIFOScheduler(std::array<Queue*,5> queues) {
 	this->queues = queues;
 }
 

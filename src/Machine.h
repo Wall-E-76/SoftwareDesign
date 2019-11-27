@@ -32,13 +32,13 @@ private:
 	double pricesPaid;
 	//^ similar to machineHoursConsumed but taking into consideration user budgets spent, so GPU factor consideration
     std::vector <Job*> jobsRunning;
-    std::vector <Queue*> queues;
+    std::array <Queue*,5> queues;
 	Scheduler* scheduler; //have it here as a reference, will need to test this and see if its right
 public:
     Machine();
-	explicit Machine(std::vector<Queue*> queues, Scheduler* schedulerArg);
+	explicit Machine(std::array<Queue*,5> queues, Scheduler* schedulerArg);
 	void addScheduler(Scheduler* schedulerArg);
-	void addQueues(std::vector<Queue*> queues);
+	void addQueues(std::array<Queue*,5> queues);
     void checkJobsRunning(double currentTime);
     void getJobsFromScheduler(double currentTime);
     void setMachineStatus(double currentTime);

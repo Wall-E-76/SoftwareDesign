@@ -31,7 +31,7 @@ public:
     explicit Generator(int totlNodes);
     std::vector <User*> getUsers();
     std::array<PropertyQueue,5> getProperty();
-    std::array<Queue*,5> getQueues();
+    std::array<Queue*,5> getQueues();  //i dont think this is used ever
     void addQueues(std::array<Queue*,5> queue);
     void addUser(User *user);
     int randomCategory(int i);
