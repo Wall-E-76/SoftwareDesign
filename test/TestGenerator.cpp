@@ -73,7 +73,7 @@ void test_createJob(){
     Job* j = g.createJob(1);
     TEST_ASSERT(j->getOwner() == s2);
     TEST_ASSERT_EQUAL_FLOAT(0,j->getTimeLeftQueue());
-    TEST_ASSERT(j->getCategory() == 2 || j->getCategory() == 1);
+    TEST_ASSERT( j->getCategory() == 1 || j->getCategory() == 2);
     TEST_ASSERT(!j->needsGPU());
     TEST_ASSERT_GREATER_OR_EQUAL(j->getReservedTime(),g.getProperty()[j->getCategory()].timeMax);
     TEST_ASSERT_GREATER_OR_EQUAL(j->getNodes(),g.getProperty()[j->getCategory()].nodeMax);
@@ -111,24 +111,26 @@ void test_check(){
     g.addUser(s);
 
     TEST_ASSERT_EQUAL_FLOAT(0,s->getSpendings());
-    Job j = {s, 0, 1, 0, g.roundUp(0.8),g.roundUp(1.6)};
-    TEST_ASSERT(j.getOwner()->isTime(0));
-    g.check(&j,0.5);
-    TEST_ASSERT_EQUAL_FLOAT(MACHINE_COST*j.getRuntime()*j.getNodes(), s->getSpendings());
-    TEST_ASSERT(&j==g.getQueues().at(j.getCategory())->nextJob());
-    TEST_ASSERT(!j.getOwner()->isTime(0));
+    Job* j = new Job(s, 0, 1, 0, g.roundUp(0.8),g.roundUp(1.6));
+    TEST_ASSERT(j->getOwner()->isTime(0));
+    g.check(j,0.5);
+    TEST_ASSERT_EQUAL_FLOAT(MACHINE_COST*j->getRuntime()*j->getNodes(), s->getSpendings());
+    TEST_ASSERT(j==g.getQueues().at(j->getCategory())->nextJob());
+    TEST_ASSERT(!j->getOwner()->isTime(0));
     double spendings = s->getSpendings();
-    Job j2 = {s, 0, 100, 0, g.roundUp(100.1),g.roundUp(105)};
-    g.check(&j2,5);
-    TEST_ASSERT_EQUAL(spendings,j2.getOwner()->getSpendings());
+    Job* j2 = new Job(s, 1, 100, 0, g.roundUp(100.1),g.roundUp(105));
+    User* owner = j2->getOwner();
+    g.check(j2,5);
+    TEST_ASSERT_EQUAL(spendings,owner->getSpendings());
+    TEST_ASSERT(nullptr == g.getQueues().at(1)->nextJob());
 
-    Student* s2 = new Student(c);
+    struct Curriculum c2 = {10,10,60,{1,0,1,1,0}};
+    Student* s2 = new Student(c2);
     g.addUser(s2);
-    Job j3 = {s2, 3, 1, 1, g.roundUp(0.8),g.roundUp(1.6)};
-    g.check(&j3,0.5);
-    TEST_ASSERT_EQUAL_FLOAT(MACHINE_COST_GPU*j3.getRuntime()*j3.getNodes(), s2->getSpendings());
-    TEST_ASSERT(&j3==g.getQueues().at(j3.getCategory())->nextJob());
-
+    Job* j3 = new Job(s2, 3, 1, 1, g.roundUp(0.8),g.roundUp(1.6));
+    g.check(j3,0.5);
+    TEST_ASSERT_EQUAL_FLOAT(MACHINE_COST_GPU*j3->getRuntime()*j3->getNodes(), s2->getSpendings());
+    TEST_ASSERT(j3==g.getQueues().at(3)->nextJob());
 }
 
 void test_lookForJobs(){
@@ -139,23 +141,15 @@ void test_lookForJobs(){
         queues[i] = q;
     }
     g.addQueues(queues);
-    struct Curriculum c1 = {1000,10,600,{0,0,1,0,0}};
+    struct Curriculum c1 = {1000,10,600,{0,0,0,1,0}};
     struct Curriculum c2 = {1000,10,600,{1,0,0,0,0}};
     Student* s1 = new Student(c1);
     g.addUser(s1);
     Student* s2 = new Student(c2);
     g.addUser(s2);
-    //g.lookForJobs(10*TIMESTEP);
-    for (int i=0; i<2;i++) {
-        //if (g.getUsers()[i]->isTime(10*TIMESTEP)) {
-            Job* newJob = g.createJob(i);
-            g.check(newJob,0.5);
-        //}
-    }
-    std::cout <<"Size : "<< g.getQueues()[2]->getJobsInQueue().size()<< std::endl;
-    //g.getQueues()[2]->nextJob()->getOwner();
-    //TEST_ASSERT(g.getQueues()[2]->nextJob()->getOwner() == s1 );
-    //TEST_ASSERT(g.getQueues()[0]->nextJob()->getOwner() == s2);
+    g.lookForJobs(10*TIMESTEP);
+    TEST_ASSERT(g.getQueues()[3]->nextJob()->getOwner() == s1 );
+    TEST_ASSERT(g.getQueues()[0]->nextJob()->getOwner() == s2);
 }
 
 int main(void)

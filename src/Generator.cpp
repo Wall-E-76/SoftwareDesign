@@ -110,11 +110,12 @@ Job* Generator::createJob(int i) {
     double runtime;
     std::normal_distribution<double> normRuntime(3*reservedTime/4,reservedTime/4);
    runtime = roundUp(normRuntime(generator));
-    if (runtime>timeMax)
-        runtime = timeMax;
+    if (runtime>reservedTime)
+        runtime = reservedTime;
     else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
-    return new Job(owner, category, cores, GPU, runtime, reservedTime);
+    Job* job = new Job(owner, category, cores, GPU, runtime, reservedTime);
+    return job;
 }
 
 void Generator::check(Job *job, double currentTime) {
@@ -125,13 +126,12 @@ void Generator::check(Job *job, double currentTime) {
         priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
     double newSpending = job->getOwner()->getSpendings()+priceJob;
     if (job->getOwner()->spend(newSpending)) {
-        std::cout <<"Bla"<<std::endl;
         (*this).queues.at(job->getCategory())->insertJob(job);
         job->getOwner()->generateNewTime(currentTime);
     }
-    /*else {
+   else {
         delete job;
-    }*/
+    }
 }
 
 void Generator::lookForJobs(double currentTime) {
