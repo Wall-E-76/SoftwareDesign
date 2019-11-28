@@ -40,7 +40,7 @@ std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Q
 			if (temp->getNodes() + running <= limitNodes) {
 				//if it dosent, we add it to our list and increment the running attribute values, then remove it from the queue
 				nextJobs.push_back(temp);
-				running[temp->getCategory()] += temp->getNodes();
+				running += temp->getNodes();
 				runningTotal += temp->getNodes();
 				queue->removeJob(n, currentTime);
 			}
