@@ -18,7 +18,6 @@ Simulation::Simulation(int totalNode, int weeks) :
 
 	queues[0] = Short; queues[1] = Medium; queues[2] = Large; queues[3] = GPU; queues[4] = Huge;
 
-	mainProgram(); //calls main program?
 }
 
 void Simulation::setup() {
@@ -26,8 +25,7 @@ void Simulation::setup() {
     Generator g = Generator((*this).totalNode);
 	g.addQueues(queues);
 	machine.addQueues(queues);
-	Scheduler* fifo = new FIFOScheduler(queues);
-	machine.addScheduler(fifo);
+
 	std::vector <struct Group> groups;
     std::string answer;
     std::array <std::string,5> arrayCategory = {"short","medium", "large", "GPU", "huge"};
@@ -86,8 +84,8 @@ void Simulation::setup() {
         double grant;
         std::cout <<"How much personal grant does this reasearcher have?";
         std::cin >> grant;
-        Researcher r = Researcher(groups[groupNumber], grant);
-        (*this).generator.addUser(&r);
+        Researcher* r = new Researcher(groups[groupNumber], grant);
+        (*this).generator.addUser(r);
         std::cout << "Researcher registered. Do you want to register another? [y/n]";
         std::cin >> answer;
     } while (answer[0]=='y'|| answer[0]=='Y');
@@ -98,8 +96,8 @@ void Simulation::setup() {
             std::cout <<"Of which curriculum is this student a part of? (0-"<<curriculums.size()-1<<")";
             std::cin >> curriNumber;
         } while (curriNumber>=curriculums.size() || curriNumber<0);
-        Student s = Student(curriculums[curriNumber]);
-        (*this).generator.addUser(&s);
+        Student* s = new Student(curriculums[curriNumber]);
+        (*this).generator.addUser(s);
         std::cout << "Student registered. Do you want to register another? [y/n]";
         std::cin >> answer;
     } while (answer[0]=='y'|| answer[0]=='Y');
@@ -122,7 +120,7 @@ void Simulation::output() {
 	(*this).machine.report();
 }
 
-void Simulation::mainProgram() {
+void Simulation::run() {
 	(*this).setup();
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();
@@ -130,6 +128,14 @@ void Simulation::mainProgram() {
 		weekCounter++;
 	}
 
+}
+
+std::array<Queue *, 5> Simulation::getQueues() {
+    return (*this).queues;
+}
+
+void Simulation::addScheduler(Scheduler* s) {
+    (*this).machine.addScheduler(s);
 }
 
 

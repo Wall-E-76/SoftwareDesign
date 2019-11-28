@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "Machine.h"
 
 //comments: might not need to be linked to queue?
@@ -18,20 +19,11 @@ Machine::Machine() {
 	scheduler = nullptr; //^^
 }
 
-Machine::Machine(std::array<Queue*,5> queues, Scheduler* schedulerArg): scheduler(schedulerArg) {
 
-	for (int i = 0; i < 5; i++) {
-		running[i] = 0;
-		processedByQueue[i] = 0;
-		waitTimeByQueue[i] = 0;
-	}
-	turnaroundRatiosSummed = 0.0;
-	machineHoursConsumed = 0.0;
-	pricesPaid = 0.0;
-	runningTotal = 0;
-	status = -1;
-	this->queues = queues;
+Scheduler *Machine::getScheduler() {
+    return (*this).scheduler;
 }
+
 
 void Machine::addScheduler(Scheduler* schedulerArg){
     (*this).scheduler = schedulerArg;
@@ -39,6 +31,14 @@ void Machine::addScheduler(Scheduler* schedulerArg){
 
 void Machine::addQueues(std::array<Queue*,5> queues){
     (*this).queues = queues;
+}
+
+std::array<Queue *, 5> Machine::getQueues() {
+    return (*this).queues;
+}
+
+std::vector<Job *> Machine::getJobsRunning() {
+    return (*this).jobsRunning;
 }
 
 void Machine::checkJobsRunning(double currentTime) {
@@ -52,11 +52,9 @@ void Machine::checkJobsRunning(double currentTime) {
 }
 void Machine::getJobsFromScheduler(double currentTime) {
 	std::vector<Job*> toRun = scheduler->getJobs(status, running, runningTotal, currentTime);
-	for (auto e : toRun) {
+	for (Job* e : toRun) {
 		jobsRunning.push_back(e); 
 		e->setTimeLeftQueue(currentTime); //Job has left wait queue and is now started runnning
-		//running[e->getCategory()] += e->getNodes();  // add to the running nodes value for the job category
-		//runningTotal += e->getNodes();   //commented out b/c they are being modi
 	}
 }
 void Machine::setMachineStatus(double currentTime) {
@@ -76,7 +74,9 @@ void Machine::setMachineStatus(double currentTime) {
 void Machine::collector(Job* job) {
 
 	running[job->getCategory()] -= job->getNodes();
-	runningTotal -= job->getNodes();
+	std::cout << "Running Total1 : "<< runningTotal << std::endl;
+    (*this).runningTotal -= job->getNodes();
+    std::cout << "Running Total2 : "<< runningTotal << std::endl;
 
 	//do metric stuff, still needs to be done
 	
@@ -86,7 +86,7 @@ void Machine::collector(Job* job) {
 
 	turnaroundRatiosSummed += (job->getWaitTime() + job->getRuntime()) / job->getRuntime();
 
-	int temp = job->getNodes() * job->getRuntime();
+	double temp = job->getNodes() * job->getRuntime();
 
 	machineHoursConsumed += temp;
 
@@ -129,11 +129,42 @@ void Machine::resetMetrics() {
 	turnaroundRatiosSummed = 0.0;
 	machineHoursConsumed = 0.0;
 	pricesPaid = 0.0;
-
 }
 
 int Machine::getRunningTotal() {
-
-	return jobsRunning.size();
-
+	return runningTotal;
 }
+
+int Machine::getMachineStatus() {
+    return (*this).status;
+}
+
+std::array<double, 5> Machine::getWaitTimeByQueue() {
+    return (*this).waitTimeByQueue;
+}
+
+std::array<int, 5> Machine::getRunning() {
+    return (*this).running;
+}
+
+std::array<int, 5> Machine::getProcessedByQueue() {
+    return (*this).processedByQueue;
+}
+
+double Machine::getTurnaroundRatioSummed() {
+    return (*this).turnaroundRatiosSummed;
+}
+
+double Machine::getPricePaid() {
+    return (*this).pricesPaid;
+}
+
+double Machine::getMachineHoursConsumed() {
+    return (*this).machineHoursConsumed;
+}
+
+
+
+
+
+

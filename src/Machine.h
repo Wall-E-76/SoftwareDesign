@@ -3,7 +3,7 @@
 #include <array>
 #include "Job.h"
 #include "Queue.h"
-#include "scheduler/Scheduler.h"
+#include "Scheduler.h"
 #define MACHINE_COST 5
 #define MACHINE_COST_GPU 6
 #define STATE1 0 //start time for state 1, so 0900 am monday
@@ -36,13 +36,22 @@ private:
 	Scheduler* scheduler; //have it here as a reference, will need to test this and see if its right
 public:
     Machine();
-	explicit Machine(std::array<Queue*,5> queues, Scheduler* schedulerArg);
 	void addScheduler(Scheduler* schedulerArg);
+	Scheduler* getScheduler();
 	void addQueues(std::array<Queue*,5> queues);
+    std::array<Queue*,5> getQueues();
+    std::vector <Job*> getJobsRunning();
+    std::array <int, 5> getRunning();
+    int getRunningTotal();
+    std::array <int, 5> getProcessedByQueue();
+    std::array<double, 5> getWaitTimeByQueue();
+    double getTurnaroundRatioSummed();
+    double getMachineHoursConsumed();
+    double getPricePaid();
     void checkJobsRunning(double currentTime);
     void getJobsFromScheduler(double currentTime);
+    int getMachineStatus();
     void setMachineStatus(double currentTime);
-	int getRunningTotal();
 	void collector(Job* job);
 	void report(); //will return or print or send to file all the info gathered and processed in collector during the course of week
 	void resetMetrics(); //resets @ beginning of new week, which starts 0900am mondays

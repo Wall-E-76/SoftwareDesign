@@ -6,10 +6,10 @@
 #include <ctgmath>
 #include "Researcher.h"
 #include "Student.h"
-#include "scheduler/fifoScheduler.h"
+#include "fifoScheduler.h"
 
 #define TIMESTEP 0.5
-#define ENDTIME 24*7
+
 
 
 class Simulation {
@@ -24,9 +24,11 @@ private:
 
 public:
     explicit Simulation(int totalNode, int weeks);
-	void mainProgram();
+	void run();
     void setup();
     void computeTimeSteps();
     void output();
+    std::array<Queue*,5> getQueues();
+    void addScheduler(Scheduler* s);
 };
 

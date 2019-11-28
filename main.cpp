@@ -10,5 +10,9 @@ int main(){
 	std::cin >> weeks;
     Simulation s (totalNode, weeks);
     s.setup();
-    return 1;
+    Scheduler* fifo = new FIFOScheduler();
+    fifo->addQueues(s.getQueues());
+    s.addScheduler(fifo);
+    s.run();
+    return 0;
 }

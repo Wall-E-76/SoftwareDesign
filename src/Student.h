@@ -16,10 +16,10 @@ private:
     int instResourceCap;
 
 public:
-    Student(struct Curriculum curriculum);
+    explicit Student(struct Curriculum curriculum);
     char whatAmI() override;
     int getInstResourceCapt();
-    bool spend(double newSpendings);
+    bool spend(double newSpendings) override;
 };
 
 

@@ -5,8 +5,8 @@
 
 class FIFOScheduler : public Scheduler{
 public:
-	FIFOScheduler(std::array<Queue*,5> queues);
-	std::vector<Job*> getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime);
+	FIFOScheduler();
+	std::vector<Job*> getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime) override;
 
 private:
 

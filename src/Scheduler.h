@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../Job.h"
-#include "../Queue.h"
+#include "Job.h"
+#include "Queue.h"
 #include <vector>
 
 #define WEEKENDCUTOFF 104
@@ -11,9 +11,11 @@
 
 class Scheduler {
 public:
-	Scheduler() {} //is this necessary?
+	Scheduler() {}
 	//virtual ~Scheduler() = 0;
 	virtual std::vector<Job*> getJobs(int status, std::array <int,5> &running, int &runningTotal, double currentTime)=0;
+	void addQueues(std::array<Queue *, 5> queues);
+    std::array<Queue *, 5> getQueues();
 	
 protected:
 	std::vector <Job*> nextUp;

@@ -1,10 +1,10 @@
 
 #include "fifoScheduler.h"
 
-
-FIFOScheduler::FIFOScheduler(std::array<Queue*,5> queues) {
-	this->queues = queues;
+FIFOScheduler::FIFOScheduler() {
 }
+
+
 
 std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int status, int statusCheck,int cutoffTime, double currentTime, int limitNodes) {
 
@@ -40,7 +40,7 @@ std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Q
 			if (temp->getNodes() + running <= limitNodes) {
 				//if it dosent, we add it to our list and increment the running attribute values, then remove it from the queue
 				nextJobs.push_back(temp);
-				running += temp->getNodes();
+				running[temp->getCategory()] += temp->getNodes();
 				runningTotal += temp->getNodes();
 				queue->removeJob(n, currentTime);
 			}
@@ -154,3 +154,5 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& runnin
 		return nextJobs;
 	}
 }
+
+
