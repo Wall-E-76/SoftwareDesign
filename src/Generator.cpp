@@ -126,12 +126,11 @@ void Generator::check(Job *job, double currentTime) {
         priceJob = job->getRuntime()*MACHINE_COST_GPU*job->getNodes();
     else
         priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
-    double newSpending = job->getOwner()->getSpendings()+priceJob;
-    if (job->getOwner()->spend(newSpending)) {
+    if (job->getOwner()->spend(priceJob)) {
         (*this).queues.at(job->getCategory())->insertJob(job);
         job->getOwner()->generateNewTime(currentTime);
     }
-   else {
+     else {
         delete job;
     }
 }

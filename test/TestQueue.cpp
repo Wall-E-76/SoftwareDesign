@@ -36,7 +36,7 @@ void test_removeJob(void){
     TEST_ASSERT(j2 == q->getJobsInQueue()[0]);
     TEST_ASSERT_EQUAL_INT(0.2,j1->getTimeLeftQueue());
 }
-
+/*
 void test_numJobsProcessed(void){
     Queue* q = new Queue();
     TEST_ASSERT_EQUAL_INT(0,q->getNumJobsProcessed());
@@ -52,7 +52,7 @@ void test_waitTime(void){
     TEST_ASSERT_EQUAL_FLOAT(30.2, q->getTotalWaitTime());
     q->addWaitTime(5);
     TEST_ASSERT_EQUAL_FLOAT(35.2, q->getTotalWaitTime());
-}
+}*/
 
 int main(void)
 {
@@ -60,7 +60,7 @@ int main(void)
     RUN_TEST(test_insertJob);
     RUN_TEST(test_nextJob);
     RUN_TEST(test_removeJob);
-    RUN_TEST(test_numJobsProcessed);
-    RUN_TEST(test_waitTime);
+    //RUN_TEST(test_numJobsProcessed);
+    //RUN_TEST(test_waitTime);
     return UNITY_END();
 }

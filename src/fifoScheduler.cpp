@@ -1,10 +1,9 @@
 
 #include "fifoScheduler.h"
+#include "Simulation.h"
 
 
-FIFOScheduler::FIFOScheduler(std::array<Queue*,5> queues) {
-	this->queues = queues;
-}
+FIFOScheduler::FIFOScheduler() = default;
 
 std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,double cutoffTime, double currentTime, int limitNodes) {
 
@@ -55,20 +54,27 @@ Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int sta
 
 	Job* temp = queues[queue]->nextJob();
 	bool flag = false;
-	if (state >= stateCheck) {
-		if (temp->getReservedTime() + currentTime > cutoffTime) {
-			//next job in this queue can't be run, so lets check for others
-			n = queues[queue]->nextJobT(cutoffTime - currentTime);
-			if (n > 0)
-				temp = queues[queue]->getJobAt(n);
-			else
-				flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
-		}
-	}
-	if (temp->getTimeEnteredQueue() < oldestTime && flag == false) {
-		oldestTime = temp->getTimeEnteredQueue();
-		oldest = queue;
-	}
+	if (temp != nullptr) {
+        if (state >= stateCheck) {
+            if (temp->getReservedTime() + currentTime > cutoffTime) {
+                //next job in this queue can't be run, so lets check for others
+                n = queues[queue]->nextJobT(cutoffTime - currentTime);
+                if (n > 0)
+                    temp = queues[queue]->getJobAt(n);
+                else
+                    flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
+            }
+        }
+        if (!flag) {
+            if (temp->getTimeEnteredQueue() < oldestTime) {
+                oldestTime = temp->getTimeEnteredQueue();
+                oldest = queue;
+            }
+        } else {
+            temp = nullptr;
+        }
+    }
+
 	return temp;
 }
 

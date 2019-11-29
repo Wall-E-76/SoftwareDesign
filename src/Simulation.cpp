@@ -104,14 +104,15 @@ void Simulation::setup() {
 }
 
 void Simulation::computeTimeSteps() {
-    while (currentTime < double(ENDTIME)){
+    while (currentTime < double(ENDTIME)*(weekCounter+1)){
+        machine.setMachineState(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
         generator->lookForJobs(currentTime);
-		machine.setMachineState(currentTime);
 		machine.checkJobsRunning(currentTime);
-		machine.getJobsFromScheduler(currentTime);
+		machine.getJobsFromScheduler(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
 		//I think that's all?
 		currentTime += TIMESTEP;
     }
+    //currentTime = 0;
 }
 
 void Simulation::output() {
@@ -123,6 +124,7 @@ void Simulation::run() {
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();
 		(*this).output();
+        (*this).machine.resetMetrics();
 		weekCounter++;
 	}
 

@@ -102,7 +102,8 @@ void Machine::collector(Job* job) {
 }
 
 void Machine::report() {
-
+    std::cout << std::endl;
+    std::cout<< "Weekly report: "<<std::endl;
 	int totalJobsProcessed = 0;
 
 	for (int i = 0; i < 5; i++) {

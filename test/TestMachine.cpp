@@ -67,23 +67,33 @@ void test_checkJobsRunning(void){
     s->addQueues(queues);
     Student* student;
     Job* j1 = new Job(student,0,5,0,1.2,1.3);
+    Job* j2 = new Job(student,0,5,0,100.1,1.3);
     Job* j3 = new Job(student,2,5,0,1.2,1.3);
+    Job* j4 = new Job(student,0,5,0,100.1,1.3);
     Job* j5 = new Job(student,4,5,0,1.2,1.3);
+
     queues[0]->insertJob(j1);
+    queues[0]->insertJob(j2);
+    queues[0]->insertJob(j4);
     m.getJobsFromScheduler(0);
     queues[2]->insertJob(j3);
     m.getJobsFromScheduler(5);
+
     queues[4]->insertJob(j5);
     m.getJobsFromScheduler(10);
     m.checkJobsRunning(4);
-    TEST_ASSERT_EQUAL_INT(2,m.getJobsRunning().size());
-    TEST_ASSERT(m.getJobsRunning()[0] == j3);
-    TEST_ASSERT(m.getJobsRunning()[1] == j5);
+    TEST_ASSERT_EQUAL_INT(4,m.getJobsRunning().size());
+    TEST_ASSERT(m.getJobsRunning()[0] == j2);
+    TEST_ASSERT(m.getJobsRunning()[1] == j4);
+    TEST_ASSERT(m.getJobsRunning()[2] == j3);
+    TEST_ASSERT(m.getJobsRunning()[3] == j5);
 
 
     m.checkJobsRunning(6.2);
-    TEST_ASSERT_EQUAL_INT(1,m.getJobsRunning().size());
-    TEST_ASSERT(m.getJobsRunning()[0] == j5);
+    TEST_ASSERT_EQUAL_INT(3,m.getJobsRunning().size());
+    TEST_ASSERT(m.getJobsRunning()[0] == j2);
+    TEST_ASSERT(m.getJobsRunning()[1] == j4);
+    TEST_ASSERT(m.getJobsRunning()[2] == j5);
     TEST_ASSERT_EQUAL_FLOAT(5,j3->getWaitTime());
     TEST_ASSERT_EQUAL_FLOAT(5,m.getWaitTimeByQueue()[2]);
 }

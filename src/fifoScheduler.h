@@ -19,8 +19,8 @@ class FIFOScheduler : public Scheduler{
 public:
 	/**\brief Constructor method.
 
-	 Creates an instance of the scheuler object, taking in a vector of pointers to the system's queue. */
-	FIFOScheduler(std::array<Queue*,5> queues);
+	 Creates an instance of the scheduler object */
+	FIFOScheduler();
 	/** \brief Method that returns list of Jobs to be run next on machine.
 
 		\param state current state of the Machine (states 1-5)
@@ -96,8 +96,10 @@ private:
 	 \param queue index in vector of queues of queue we are looking at
 	 \param currentTime value of current time of the week, in hours.
 	 \return pointer to oldest Job currently able to run from this Queue.
-
-	 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11
+	FIFOScheduler();
+	std::vector<Job*> getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime) override;
+	std::vector<Job*> fillReserved(int& running, int& runningTotal, Queue*& queue, int status, int statusCheck,
+		int cutoffTime, double currentTime, int limitNodes);
 	 
 */
 	Job* oldestCheck(int& oldest, double& oldestTime, int& n, int state,int stateCheck, 
