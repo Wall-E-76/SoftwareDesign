@@ -1,12 +1,12 @@
 
 #include "fifoScheduler.h"
 
-FIFOScheduler::FIFOScheduler() {
+
+FIFOScheduler::FIFOScheduler(std::array<Queue*,5> queues) {
+	this->queues = queues;
 }
 
-
-
-std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int status, int statusCheck,int cutoffTime, double currentTime, int limitNodes) {
+std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,double cutoffTime, double currentTime, int limitNodes) {
 
 	std::vector<Job*> nextJobs; 
 
@@ -21,7 +21,7 @@ std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Q
 			//if its a nullptr, this queue is emptpy so break will take us to the end of the method
 			if (temp == nullptr) break;
 			//check if the current machine status is greater than or equal to the state that will require us to consider job times
-			if (status >= statusCheck) {
+			if (state >= stateCheck) {
 				//if the reserved time of the first job in the queue will cause us to go over cutoffTime, this job will need to wait till next week, so in the meantime
 				//we will check if any other jobs in this queue can fill the reserved space
 				if (temp->getReservedTime() + currentTime > cutoffTime) {
@@ -51,51 +51,49 @@ std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Q
 	return nextJobs;
 }
 
-Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int status, int statusCheck, double cutoffTime, int queue, double currentTime) {
+Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int state, int stateCheck, double cutoffTime, int queue, double currentTime) {
 
 	Job* temp = queues[queue]->nextJob();
 	bool flag = false;
-	if (temp != nullptr) {
-        if (status >= statusCheck) {
-            if (temp->getReservedTime() + currentTime > cutoffTime) {
-                //next job in this queue can't be run, so lets check for others
-                n = queues[queue]->nextJobT(cutoffTime - currentTime);
-                if (n > 0)
-                    temp = queues[queue]->getJobAt(n);
-                else
-                    flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
-            }
-        }
-        if (temp->getTimeEnteredQueue() < oldestTime && flag == false) {
-            oldestTime = temp->getTimeEnteredQueue();
-            oldest = queue;
-        }
-    }
+	if (state >= stateCheck) {
+		if (temp->getReservedTime() + currentTime > cutoffTime) {
+			//next job in this queue can't be run, so lets check for others
+			n = queues[queue]->nextJobT(cutoffTime - currentTime);
+			if (n > 0)
+				temp = queues[queue]->getJobAt(n);
+			else
+				flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
+		}
+	}
+	if (temp->getTimeEnteredQueue() < oldestTime && flag == false) {
+		oldestTime = temp->getTimeEnteredQueue();
+		oldest = queue;
+	}
 	return temp;
 }
 
-std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime) {
+std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime) {
 
-	switch (status) {
+	switch (state) {
 
 	case 5:           //case for state 5, weekend opeteration
 
-		return fillReserved(running[4], runningTotal, queues[4], status, 5, WEEKDAYCUTOFF, currentTime, totalNodes);
+		return fillReserved(running[4], runningTotal, queues[4], state, 5, WEEKDAYCUTOFF, currentTime, totalNodes);
 
 	default:       //case for states 1-4, weekday opertaion
 
 		std::vector<Job*> nextJobs;
 		std::vector<Job*> temp;
 
-		temp = fillReserved(running[0], runningTotal, queues[0], status, 4, WEEKENDCUTOFF, currentTime, shortMin);
+		temp = fillReserved(running[0], runningTotal, queues[0], state, 4, WEEKENDCUTOFF, currentTime, shortMin);
 
 		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
-		temp = fillReserved(running[1], runningTotal, queues[1], status, 3, WEEKENDCUTOFF, currentTime, medMin);
+		temp = fillReserved(running[1], runningTotal, queues[1], state, 3, WEEKENDCUTOFF, currentTime, medMin);
 
 		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
-		temp = fillReserved(running[3], runningTotal, queues[3], status, 3, WEEKENDCUTOFF, currentTime, gpuNodes);
+		temp = fillReserved(running[3], runningTotal, queues[3], state, 3, WEEKENDCUTOFF, currentTime, gpuNodes);
 		
 		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
@@ -105,11 +103,11 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& runnin
 			int oldest = 3; //queues index of oldest job, initialized to unreachable value
 			int nShort = 0; int nMedium = 0; int nLarge = 0;
 
-			Job* temp0 = oldestCheck(oldest, oldestTime, nShort, status, 4, WEEKENDCUTOFF, 0, currentTime);
+			Job* temp0 = oldestCheck(oldest, oldestTime, nShort, state, 4, WEEKENDCUTOFF, 0, currentTime);
 
-			Job* temp1 = oldestCheck(oldest, oldestTime, nMedium, status, 3, WEEKENDCUTOFF, 1, currentTime);
+			Job* temp1 = oldestCheck(oldest, oldestTime, nMedium, state, 3, WEEKENDCUTOFF, 1, currentTime);
 
-			Job* temp2 = oldestCheck(oldest, oldestTime, nLarge, status, 2, WEEKENDCUTOFF, 2, currentTime);
+			Job* temp2 = oldestCheck(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, currentTime);
 
 			if (temp0 == nullptr && temp1 == nullptr && temp2 == nullptr)
 				break; //if there are no more jobs that can be run next, break out from scheduler
@@ -156,5 +154,3 @@ std::vector<Job*> FIFOScheduler::getJobs(int status, std::array <int, 5>& runnin
 		return nextJobs;
 	}
 }
-
-
