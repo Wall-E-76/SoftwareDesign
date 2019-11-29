@@ -9,9 +9,6 @@ int main(){
 	std::cout << "How many weeks is this simulation?";
 	std::cin >> weeks;
     Simulation s (totalNode, weeks);
-    Scheduler* fifo = new FIFOScheduler();
-    fifo->addQueues(s.getQueues());
-    s.addScheduler(fifo);
     s.run();
     return 0;
 }

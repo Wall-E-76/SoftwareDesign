@@ -42,12 +42,16 @@ std::vector<Job *> Machine::getJobsRunning() {
 }
 
 void Machine::checkJobsRunning(double currentTime) {
-	int n = jobsRunning.size();
-	for (int i = 0; i < n; i++) {
-		if (jobsRunning[i]->doneRunning(currentTime)) {
-			collector(jobsRunning[i]);  
-			jobsRunning.erase(jobsRunning.begin() + i);  //remove from vector of current jobs
+	int counter = 0;
+	while (counter < jobsRunning.size()) {
+		if (jobsRunning[counter]->doneRunning(currentTime)) {
+			collector(jobsRunning[counter]);
+			jobsRunning.erase(jobsRunning.begin() + counter);  //remove from vector of current jobs
 		}
+		else{
+            counter++;
+		}
+
 	}
 }
 void Machine::getJobsFromScheduler(double currentTime) {
@@ -74,9 +78,7 @@ void Machine::setMachineStatus(double currentTime) {
 void Machine::collector(Job* job) {
 
 	running[job->getCategory()] -= job->getNodes();
-	std::cout << "Running Total1 : "<< runningTotal << std::endl;
     (*this).runningTotal -= job->getNodes();
-    std::cout << "Running Total2 : "<< runningTotal << std::endl;
 
 	//do metric stuff, still needs to be done
 	
@@ -103,6 +105,7 @@ void Machine::report() {
 	int totalJobsProcessed = 0;
 
 	for (int i = 0; i < 5; i++) {
+        std::cout << "Total jobs processed in queue "<<i<<": " << processedByQueue[i]<< std::endl;
 		totalJobsProcessed += processedByQueue[i];
 	}
 
@@ -113,6 +116,11 @@ void Machine::report() {
 	double utilizationRatio = machineHoursConsumed / (double(WEEKDAYCUTOFF) * totalNodes);
 
 	double averageTurnaroundRatio = turnaroundRatiosSummed / totalJobsProcessed;
+
+	std::cout << "Utilization Ratio: " << utilizationRatio<< std::endl;
+    std::cout << "Machine cost: " << machineCost<< std::endl;
+    std::cout << "Price paid: "<< (*this).pricesPaid<< std::endl;
+    std::cout << "Machine Hours consumed: "<< machineHoursConsumed << std::endl;
 
 	//here will fill in code to output info to a file of a certain name...
 	//probably "weekX_runtime_metrics.txt"

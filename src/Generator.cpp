@@ -53,6 +53,8 @@ void Generator::addQueues(std::array<Queue*,5> queues) {
 }
 
 
+
+
 int Generator::randomCategory(int i) {
     int sum=0;
     // We find the number of possible category

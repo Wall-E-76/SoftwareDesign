@@ -18,7 +18,7 @@ private:
     double currentTime;
 	int weekCounter;
 	int weeksSimulated;
-    Generator generator;
+    Generator* generator;
     Machine machine;
 	std::array<Queue*,5> queues;
 
@@ -30,5 +30,7 @@ public:
     void output();
     std::array<Queue*,5> getQueues();
     void addScheduler(Scheduler* s);
+    void addQueues(std::array<Queue*,5> queues);
+    void addGenerator(Generator* g);
 };
 

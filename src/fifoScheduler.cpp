@@ -55,20 +55,22 @@ Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int sta
 
 	Job* temp = queues[queue]->nextJob();
 	bool flag = false;
-	if (status >= statusCheck) {
-		if (temp->getReservedTime() + currentTime > cutoffTime) {
-			//next job in this queue can't be run, so lets check for others
-			n = queues[queue]->nextJobT(cutoffTime - currentTime);
-			if (n > 0)
-				temp = queues[queue]->getJobAt(n);
-			else
-				flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
-		}
-	}
-	if (temp->getTimeEnteredQueue() < oldestTime && flag == false) {
-		oldestTime = temp->getTimeEnteredQueue();
-		oldest = queue;
-	}
+	if (temp != nullptr) {
+        if (status >= statusCheck) {
+            if (temp->getReservedTime() + currentTime > cutoffTime) {
+                //next job in this queue can't be run, so lets check for others
+                n = queues[queue]->nextJobT(cutoffTime - currentTime);
+                if (n > 0)
+                    temp = queues[queue]->getJobAt(n);
+                else
+                    flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
+            }
+        }
+        if (temp->getTimeEnteredQueue() < oldestTime && flag == false) {
+            oldestTime = temp->getTimeEnteredQueue();
+            oldest = queue;
+        }
+    }
 	return temp;
 }
 

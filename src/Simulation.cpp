@@ -8,23 +8,23 @@ Simulation::Simulation(int totalNode, int weeks) :
         machine(Machine()),
 		weekCounter(0),
 		weeksSimulated(weeks)
-{
-
-	Queue* Short = new Queue();
-	Queue* Medium = new Queue();
-	Queue* Large = new Queue();
-	Queue* GPU = new Queue();
-	Queue* Huge = new Queue();
-
-	queues[0] = Short; queues[1] = Medium; queues[2] = Large; queues[3] = GPU; queues[4] = Huge;
-
-}
+{}
 
 void Simulation::setup() {
     std::cout << "Beginning of setup"<< std::endl;
-    Generator g = Generator((*this).totalNode);
-	g.addQueues(queues);
+    std::array<Queue*,5> queues{};
+    for (int i =0; i<5;i++){
+        auto* q = new Queue();
+        queues[i] = q;
+    }
+    (*this).addQueues(queues);
+    auto* g = new Generator((*this).totalNode);
+    (*this).addGenerator(g);
+    g->addQueues(queues);
 	machine.addQueues(queues);
+    Scheduler* fifo = new FIFOScheduler();
+    fifo->addQueues(queues);
+    (*this).addScheduler(fifo);
 
 	std::vector <struct Group> groups;
     std::string answer;
@@ -85,7 +85,7 @@ void Simulation::setup() {
         std::cout <<"How much personal grant does this reasearcher have?";
         std::cin >> grant;
         Researcher* r = new Researcher(groups[groupNumber], grant);
-        (*this).generator.addUser(r);
+        (*this).generator->addUser(r);
         std::cout << "Researcher registered. Do you want to register another? [y/n]";
         std::cin >> answer;
     } while (answer[0]=='y'|| answer[0]=='Y');
@@ -97,7 +97,7 @@ void Simulation::setup() {
             std::cin >> curriNumber;
         } while (curriNumber>=curriculums.size() || curriNumber<0);
         Student* s = new Student(curriculums[curriNumber]);
-        (*this).generator.addUser(s);
+        (*this).generator->addUser(s);
         std::cout << "Student registered. Do you want to register another? [y/n]";
         std::cin >> answer;
     } while (answer[0]=='y'|| answer[0]=='Y');
@@ -105,7 +105,7 @@ void Simulation::setup() {
 
 void Simulation::computeTimeSteps() {
     while (currentTime < double(ENDTIME)){
-        generator.lookForJobs(currentTime);
+        generator->lookForJobs(currentTime);
 		machine.setMachineStatus(currentTime);
 		machine.checkJobsRunning(currentTime);
 		machine.getJobsFromScheduler(currentTime);
@@ -115,8 +115,6 @@ void Simulation::computeTimeSteps() {
 }
 
 void Simulation::output() {
-
-	(*this).machine.report();
 	(*this).machine.report();
 }
 
@@ -136,6 +134,13 @@ std::array<Queue *, 5> Simulation::getQueues() {
 
 void Simulation::addScheduler(Scheduler* s) {
     (*this).machine.addScheduler(s);
+}
+
+void Simulation::addQueues(std::array<Queue *, 5> queues) {
+    (*this).queues = queues;
+}
+void Simulation::addGenerator(Generator* g){
+    (*this).generator = g;
 }
 
 
