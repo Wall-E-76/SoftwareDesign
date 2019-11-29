@@ -72,7 +72,7 @@ void Machine::setMachineState(double currentTime) {
 		state = 3;
 	else if (currentTime >= STATE2)
 		state = 2;
-	else
+	else 
 		state = 1;
 }
 

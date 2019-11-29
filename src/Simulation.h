@@ -11,6 +11,7 @@
 #include "Job.h"
 #include "Generator.h"
 #include <iostream>
+#include <fstream>
 #include <ctgmath>
 #include "Researcher.h"
 #include "Student.h"

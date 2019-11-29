@@ -6,6 +6,7 @@
 #include "Machine.h"
 #include "Queue.h"
 #include <array>
+#include <iostream>
 #define TIMESTEP 0.5
 #define ENDTIME 24*14
 #define SHORTMAXNODES 2

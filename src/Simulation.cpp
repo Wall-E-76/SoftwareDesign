@@ -26,31 +26,33 @@ void Simulation::setupFile(std::string input) {
 	fifo->addQueues(queues);
 	(*this).addScheduler(fifo);
 
+	std::ifstream in(input);
 	std::vector <struct Group> groups;
-	std::stringstream stringStream(input);
 	std::string line;
 	std::string space = " ";
 	//add groups
 	while (true) {
 		double paramGroup;
 		struct Group group {};
-		std::getline(stringStream, line); //group # line
-		std::getline(stringStream, line); //budget line
+		std::getline(in, line); //group # line
+		std::cout << "Test1" << line << std::endl;
+		std::getline(in, line); //budget line
+		std::cout << "Test2" << line <<std::endl;
 		paramGroup = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		group.budget = paramGroup;
 
-		std::getline(stringStream, line); //expDistParam line
+		std::getline(in, line); //expDistParam line
 		paramGroup = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		group.expoParameter = paramGroup;
 
-		std::getline(stringStream, line); //permissions line
+		std::getline(in, line); //permissions line
 		std::string temp = line.substr(line.find(space) + 1, line.size() - 1);
 		for (int i = 0; i < 5; i++) {
 			char num = temp[i * 2];
 			group.permission[i] = num == '1';
 		}
 		groups.push_back(group);
-		std::getline(stringStream, line); // '+' or '--' line
+		std::getline(in, line); // '+' or '--' line
 		if (line == "--") break;
 	}
 	std::vector <struct Curriculum> curriculums;
@@ -58,27 +60,27 @@ void Simulation::setupFile(std::string input) {
 	while (true) {
 		double paramCurriculum;
 		struct Curriculum curriculum {};
-		std::getline(stringStream, line); //curriculum # line
-		std::getline(stringStream, line); //budget line
+		std::getline(in, line); //curriculum # line
+		std::getline(in, line); //budget line
 		paramCurriculum = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		curriculum.budget = paramCurriculum;
 
-		std::getline(stringStream, line); //expDistParam line
+		std::getline(in, line); //expDistParam line
 		paramCurriculum = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		curriculum.expoParameter = paramCurriculum;
 
-		std::getline(stringStream, line); //instCap line
+		std::getline(in, line); //instCap line
 		paramCurriculum = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		curriculum.instResourceCap = paramCurriculum;
 
-		std::getline(stringStream, line); //permissions line
+		std::getline(in, line); //permissions line
 		std::string temp = line.substr(line.find(space) + 1, line.size() - 1);
 		for (int i = 0; i < 5; i++) {
 			char num = temp[i * 2];
 			curriculum.permission[i] = num == '1';
 		}
 		curriculums.push_back(curriculum);
-		std::getline(stringStream, line); // '+' or '--' line
+		std::getline(in, line); // '+' or '--' line
 		if (line == "--") break;
 	}
 	//create researchers by group
@@ -86,11 +88,11 @@ void Simulation::setupFile(std::string input) {
 	while (true) {
 		int groupSize; //number of people in group
 		int grantMembers; //number of people with grant in group
-		std::getline(stringStream, line); //number of researchers
+		std::getline(in, line); //number of researchers
 		groupSize = std::stoi(line.substr(line.find(space) + 1, line.size() - 1));
-		std::getline(stringStream, line); //number of researchers with grant
+		std::getline(in, line); //number of researchers with grant
 		grantMembers = std::stoi(line.substr(line.find(space) + 1, line.size() - 1));
-		std::getline(stringStream, line); //grant values
+		std::getline(in, line); //grant values
 		std::string temp = line.substr(line.find(space) + 1, line.size() - 1);
 		std::string delim = ",";
 		size_t pos;
@@ -107,7 +109,7 @@ void Simulation::setupFile(std::string input) {
 			(*this).generator->addUser(r);
 		}
 
-		std::getline(stringStream, line); //'+' or '--' line
+		std::getline(in, line); //'+' or '--' line
 		if (line == "--") break;
 		groupNumber++;
 	}
@@ -116,13 +118,13 @@ void Simulation::setupFile(std::string input) {
 	int curriNumber = 0;
 	while (true) {
 		int groupSize;
-		std::getline(stringStream, line); //number of students
+		std::getline(in, line); //number of students
 		groupSize = std::stoi(line.substr(line.find(space) + 1, line.size() - 1));
 		for (int i = 0; i < groupSize; i++) {
 			Student* s = new Student(curriculums[curriNumber]);
 			(*this).generator->addUser(s);
 		}
-		std::getline(stringStream, line); //'+' or '--' line
+		std::getline(in, line); //'+' or '--' line
 		if (line == "--") break;
 		curriNumber++;
 	}
@@ -223,10 +225,12 @@ void Simulation::setup() {
 
 void Simulation::computeTimeSteps() {
     while (currentTime < double(ENDTIME)*(weekCounter+1)){
-        machine.setMachineState(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
+        //machine.setMachineState(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
+		machine.setMachineState(currentTime);
         generator->lookForJobs(currentTime);
 		machine.checkJobsRunning(currentTime);
-		machine.getJobsFromScheduler(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
+		//machine.getJobsFromScheduler(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
+		machine.getJobsFromScheduler(currentTime);
 		//I think that's all?
 		currentTime += TIMESTEP;
     }
@@ -238,7 +242,12 @@ void Simulation::output() {
 }
 
 void Simulation::run() {
-	(*this).setup();
+
+	char ans;
+	std::cout << "File setup or manual setup? y=file, n=manual.";
+	std::cin >> ans;
+	if (ans == 'y') (*this).setupFile("inputSA.txt");
+	else (*this).setup();
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();
 		(*this).output();
