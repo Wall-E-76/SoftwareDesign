@@ -224,17 +224,18 @@ void Simulation::setup() {
 }
 
 void Simulation::computeTimeSteps() {
-    while (currentTime < double(ENDTIME)*(weekCounter+1)){
+   // while (currentTime < double(ENDTIME)*(weekCounter+1)){
+	while (currentTime < double(ENDTIME) * (weekCounter + 1)) {  //changed  -Callum
         //machine.setMachineState(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
-		machine.setMachineState(currentTime);
+		machine.setMachineState(currentTime); //changed - Callum
         generator->lookForJobs(currentTime);
 		machine.checkJobsRunning(currentTime);
 		//machine.getJobsFromScheduler(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
-		machine.getJobsFromScheduler(currentTime);
+		machine.getJobsFromScheduler(currentTime); //changed - Callum
 		//I think that's all?
 		currentTime += TIMESTEP;
     }
-    //currentTime = 0;
+    currentTime = 0; //changed - Callum
 }
 
 void Simulation::output() {

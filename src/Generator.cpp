@@ -117,6 +117,7 @@ Job* Generator::createJob(int i) {
     else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
     Job* job = new Job(owner, category, cores, GPU, runtime, reservedTime);
+	//if (category == 2)std::cout << "large job created" << std::endl;
     return job;
 }
 
