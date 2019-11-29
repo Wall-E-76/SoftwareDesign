@@ -35,9 +35,7 @@ void Simulation::setupFile(std::string input) {
 		double paramGroup;
 		struct Group group {};
 		std::getline(in, line); //group # line
-		std::cout << "Test1" << line << std::endl;
 		std::getline(in, line); //budget line
-		std::cout << "Test2" << line <<std::endl;
 		paramGroup = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		group.budget = paramGroup;
 
@@ -225,7 +223,7 @@ void Simulation::setup() {
 
 void Simulation::computeTimeSteps() {
    // while (currentTime < double(ENDTIME)*(weekCounter+1)){
-	while (currentTime < double(ENDTIME) * (weekCounter + 1)) {  //changed  -Callum
+	while (currentTime < double(ENDTIME)) {  //changed  -Callum
         //machine.setMachineState(currentTime-floor(currentTime/ENDTIME)*(ENDTIME-1));
 		machine.setMachineState(currentTime); //changed - Callum
         generator->lookForJobs(currentTime);
