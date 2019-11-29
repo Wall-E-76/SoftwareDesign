@@ -2,18 +2,8 @@
 #include "Queue.h"
 
 Queue::Queue():
-    numJobsProcessed(0),
-    totalWaitTime(0),
     jobsInQueue({})
 {
-}
-
-int Queue::getNumJobsProcessed() {
-    return (*this).numJobsProcessed;
-}
-
-double Queue::getTotalWaitTime() {
-    return (*this).totalWaitTime;
 }
 
 void Queue::insertJob(Job *job) {
@@ -38,14 +28,6 @@ void Queue::removeJob(int n, double currentTime) {
 
 std::vector<Job *> Queue::getJobsInQueue() {
     return (*this).jobsInQueue;
-}
-
-void Queue::incrNumJobsProcessed() {
-    (*this).numJobsProcessed++;
-}
-
-void Queue::addWaitTime(double time) {
-    (*this).totalWaitTime += time;
 }
 
 Job* Queue::getJobAt(int n) {

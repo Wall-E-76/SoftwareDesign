@@ -11,4 +11,5 @@ int main(){
     Simulation s (totalNode, weeks);
     s.run();
     return 0;
+
 }

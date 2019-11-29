@@ -88,18 +88,18 @@ void test_checkJobsRunning(void){
     TEST_ASSERT_EQUAL_FLOAT(5,m.getWaitTimeByQueue()[2]);
 }
 
-void test_setMachineStatus(void){
+void test_setMachineState(void){
     Machine m = Machine();
-    m.setMachineStatus(STATE5);
-    TEST_ASSERT_EQUAL_INT(5, m.getMachineStatus());
-    m.setMachineStatus(STATE4);
-    TEST_ASSERT_EQUAL_INT(4, m.getMachineStatus());
-    m.setMachineStatus(STATE3);
-    TEST_ASSERT_EQUAL_INT(3, m.getMachineStatus());
-    m.setMachineStatus(STATE2);
-    TEST_ASSERT_EQUAL_INT(2, m.getMachineStatus());
-    m.setMachineStatus(STATE1);
-    TEST_ASSERT_EQUAL_INT(1, m.getMachineStatus());
+    m.setMachineState(STATE5);
+    TEST_ASSERT_EQUAL_INT(5, m.getMachineState());
+    m.setMachineState(STATE4);
+    TEST_ASSERT_EQUAL_INT(4, m.getMachineState());
+    m.setMachineState(STATE3);
+    TEST_ASSERT_EQUAL_INT(3, m.getMachineState());
+    m.setMachineState(STATE2);
+    TEST_ASSERT_EQUAL_INT(2, m.getMachineState());
+    m.setMachineState(STATE1);
+    TEST_ASSERT_EQUAL_INT(1, m.getMachineState());
 }
 
 void test_collector(void){
@@ -175,7 +175,7 @@ int main(void)
     RUN_TEST(test_initialization);
     RUN_TEST(test_getJobsFromScheduler);
     RUN_TEST(test_checkJobsRunning);
-    RUN_TEST(test_setMachineStatus);
+    RUN_TEST(test_setMachineState);
     RUN_TEST(test_collector);
     RUN_TEST(test_resetMetrics);
     return UNITY_END();

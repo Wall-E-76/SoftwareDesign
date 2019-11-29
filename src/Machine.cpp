@@ -15,9 +15,10 @@ Machine::Machine() {
 	machineHoursConsumed = 0.0;
 	pricesPaid = 0.0;
     runningTotal = 0;
-	status = -1; // added these, not sure if right
+	state = -1; // added these, not sure if right
 	scheduler = nullptr; //^^
 }
+
 
 
 Scheduler *Machine::getScheduler() {
@@ -55,24 +56,24 @@ void Machine::checkJobsRunning(double currentTime) {
 	}
 }
 void Machine::getJobsFromScheduler(double currentTime) {
-	std::vector<Job*> toRun = scheduler->getJobs(status, running, runningTotal, currentTime);
-	for (Job* e : toRun) {
+	std::vector<Job*> toRun = scheduler->getJobs(state, running, runningTotal, currentTime);
+	for (auto e : toRun) {
 		jobsRunning.push_back(e); 
 		e->setTimeLeftQueue(currentTime); //Job has left wait queue and is now started runnning
 	}
 }
-void Machine::setMachineStatus(double currentTime) {
+void Machine::setMachineState(double currentTime) {
 
 	if (currentTime >= STATE5)
-        status = 5;
+        state = 5;
 	else if (currentTime >= STATE4)
-		status = 4;
+		state = 4;
 	else if (currentTime >= STATE3)
-		status = 3;
+		state = 3;
 	else if (currentTime >= STATE2)
-		status = 2;
+		state = 2;
 	else
-		status = 1;
+		state = 1;
 }
 
 void Machine::collector(Job* job) {
@@ -143,8 +144,8 @@ int Machine::getRunningTotal() {
 	return runningTotal;
 }
 
-int Machine::getMachineStatus() {
-    return (*this).status;
+int Machine::getMachineState() {
+    return (*this).state;
 }
 
 std::array<double, 5> Machine::getWaitTimeByQueue() {

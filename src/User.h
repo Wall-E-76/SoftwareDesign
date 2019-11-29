@@ -1,6 +1,14 @@
+/*! \file
+
+\class User
+
+\brief User class.
+
+!!!!!!!!!!!!!!!.........describe here......!!!!!!!!!!!!!!!!!!!
+*/
+
 #pragma once
 #include <array>
-
 
 class User {
 protected:

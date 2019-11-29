@@ -3,7 +3,7 @@
 
 MockScheduler::MockScheduler() : Scheduler(){}
 
-std::vector<Job*> MockScheduler::getJobs(int status, std::array <int,5> &running, int &runningTotal, double currentTime){
+std::vector<Job*> MockScheduler::getJobs(int state, std::array <int,5> &running, int &runningTotal, double currentTime){
     std::vector<Job*> nextJobs;
     for (int i =0; i<5;i++){
         while ((*this).queues[i]->nextJob()!=nullptr){

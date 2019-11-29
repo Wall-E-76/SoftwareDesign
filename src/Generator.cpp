@@ -1,7 +1,7 @@
 
 #include "Generator.h"
 #include <random>
-#include <src/Researcher.h>
+#include "Researcher.h"
 
 
 Generator::Generator(int totlNodes) {

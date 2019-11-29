@@ -106,7 +106,7 @@ void Simulation::setup() {
 void Simulation::computeTimeSteps() {
     while (currentTime < double(ENDTIME)){
         generator->lookForJobs(currentTime);
-		machine.setMachineStatus(currentTime);
+		machine.setMachineState(currentTime);
 		machine.checkJobsRunning(currentTime);
 		machine.getJobsFromScheduler(currentTime);
 		//I think that's all?
