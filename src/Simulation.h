@@ -43,6 +43,7 @@ public:
     explicit Simulation(int totalNode, int weeks);
 	void run();
     void setup();
+	void setupFile(std::string input);
     void computeTimeSteps();
     void output();
     std::array<Queue*,5> getQueues();

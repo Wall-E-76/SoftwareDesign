@@ -65,13 +65,9 @@ Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int sta
                     flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
             }
         }
-        if (!flag) {
-            if (temp->getTimeEnteredQueue() < oldestTime) {
-                oldestTime = temp->getTimeEnteredQueue();
-                oldest = queue;
-            }
-        } else {
-            temp = nullptr;
+        if (temp->getTimeEnteredQueue() < oldestTime&& !flag) {
+            oldestTime = temp->getTimeEnteredQueue();
+            oldest = queue;
         }
     }
 
@@ -155,6 +151,8 @@ std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running
 				else
 					break;
 			}
+
+			else break;
 
 		}
 		return nextJobs;
