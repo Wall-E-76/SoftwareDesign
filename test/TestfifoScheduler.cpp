@@ -4,6 +4,8 @@
 #include "src/Queue.cpp"
 #include "src/Queue.h"
 #include "src/Student.cpp"
+#include "src/Job.cpp"
+#include "src/User.cpp"
 
 void setUp(){}
 
