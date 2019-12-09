@@ -4,7 +4,8 @@
 
 \brief User class.
 
-!!!!!!!!!!!!!!!.........describe here......!!!!!!!!!!!!!!!!!!!
+ The User class is an abstract class. Users are producers of requests. They are allowed to create only certain types of jobs, those permissions are defined at the creation of the user.
+ Each User request leads to the creation of a job which characteristics fits the permissions.
 */
 
 #pragma once
@@ -23,7 +24,6 @@ public:
     User(int expoParameter, double budget, std::array<bool,5> permission);
     bool isTime(double time);
     void generateNewTime(double time);
-    virtual char whatAmI()=0;
     double getBudget();
     double getSpendings();
     virtual bool spend(double newSpendings)=0;

@@ -8,10 +8,6 @@ Student::Student(struct Curriculum curriculum) :
         {
 }
 
-char Student::whatAmI() {
-    return 'S';
-}
-
 int Student::getInstResourceCapt() {
     return (*this).instResourceCap;
 }

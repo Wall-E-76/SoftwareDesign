@@ -12,12 +12,6 @@ void test_getter(void){
     TEST_ASSERT_EQUAL_INT(15,r->getGrant());
 }
 
-void test_whatAmI(void){
-    struct Group g = {5,10,{1,1,1,0,1}};
-    Researcher* r = new Researcher(g,15);
-    TEST_ASSERT_EQUAL(r->whatAmI(),'R');
-}
-
 void test_spend(void){
     struct Group g = {5,10,{1,1,1,0,1}};
     Researcher* r = new Researcher(g,15);
@@ -30,7 +24,6 @@ int main(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_getter);
-    RUN_TEST(test_whatAmI);
     RUN_TEST(test_spend);
     return UNITY_END();
 }

@@ -242,10 +242,10 @@ void Simulation::output() {
 
 void Simulation::run() {
 
-	char ans;
+	std::string answer;
 	std::cout << "File setup or manual setup? y=file, n=manual.";
-	std::cin >> ans;
-	if (ans == 'y') (*this).setupFile("../src/inputSA.txt"); // Or change to inputSA.txt
+	std::cin >> answer;
+	if (answer[0]=='y'|| answer[0]=='Y') (*this).setupFile("../src/inputSA.txt"); // Or change to inputSA.txt
 	else (*this).setup();
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();

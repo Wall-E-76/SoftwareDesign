@@ -14,7 +14,6 @@ private:
 public:
     Researcher(struct Group group, double grant);
     double getGrant();
-    char whatAmI() override;
-    bool spend(double newSpendings);
+    bool spend(double newSpendings) override ;
 };
 

@@ -12,12 +12,6 @@ void test_getter(void){
     TEST_ASSERT_EQUAL_INT(60,s->getInstResourceCapt());
 }
 
-void test_whatAmI(void){
-    struct Curriculum c = {5,10,60,{1,1,1,0,1}};
-    Student* s = new Student(c);
-    TEST_ASSERT_EQUAL(s->whatAmI(),'S');
-}
-
 void test_spend(void){
     struct Curriculum c = {5,10,60,{1,1,1,0,1}};
     Student* s = new Student(c);
@@ -30,6 +24,6 @@ int main(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_getter);
-    RUN_TEST(test_whatAmI);
+    RUN_TEST(test_spend);
     return UNITY_END();
 }

@@ -17,7 +17,6 @@ private:
 
 public:
     explicit Student(struct Curriculum curriculum);
-    char whatAmI() override;
     int getInstResourceCapt();
     bool spend(double newSpendings) override;
 };

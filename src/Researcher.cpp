@@ -10,9 +10,6 @@ Researcher::Researcher(struct Group group, double grant) :
 double Researcher::getGrant() {
     return (*this).grant;
 }
-char Researcher::whatAmI() {
-    return 'R';
-}
 
 bool Researcher::spend(double newSpendings) {
     if ((*this).spendings+newSpendings < ((*this).budget)+(*this).grant){

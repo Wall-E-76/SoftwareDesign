@@ -4,7 +4,8 @@
 
 \brief Queue class.
 
-!!!!!!!!!!!!!!!!!!enter description here!!!!!!!!!!!!!!!1
+ A Queue contains a certain category of job as they wait to be processed. New elements will be pushed back, and elements will usually be taken out of this Queue starting from
+ its head, although any element can be accessed at any time.
 */
 
 #pragma once
