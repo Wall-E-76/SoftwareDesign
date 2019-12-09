@@ -5,7 +5,7 @@
 
 FIFOScheduler::FIFOScheduler() = default;
 
-std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,double cutoffTime, double currentTime, int limitNodes) {
+std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,double cutoffTime, double currentTime, int limitNodes, double systemTime) {
 
 	std::vector<Job*> nextJobs; 
 
@@ -41,7 +41,7 @@ std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Q
 				nextJobs.push_back(temp);
 				running += temp->getNodes();
 				runningTotal += temp->getNodes();
-				queue->removeJob(n, currentTime);
+				queue->removeJob(n, systemTime);
 			}
 			else
 				break;
@@ -65,7 +65,7 @@ Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int sta
                     flag = true;//no jobs in this queue can be run at this time, so make it so it dosent check the times below
             }
         }
-        if (temp->getTimeEnteredQueue() < oldestTime&& !flag) {
+        if (temp->getTimeEnteredQueue() < oldestTime && !flag) {
             oldestTime = temp->getTimeEnteredQueue();
             oldest = queue;
         }
@@ -74,28 +74,28 @@ Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int sta
 	return temp;
 }
 
-std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime) {
+std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime, double systemTime) {
 
 	switch (state) {
 
 	case 5:           //case for state 5, weekend opeteration
 
-		return fillReserved(running[4], runningTotal, queues[4], state, 5, WEEKDAYCUTOFF, currentTime, totalNodes);
+		return fillReserved(running[4], runningTotal, queues[4], state, 5, WEEKDAYCUTOFF, currentTime, totalNodes, systemTime);
 
 	default:       //case for states 1-4, weekday opertaion
 
 		std::vector<Job*> nextJobs;
 		std::vector<Job*> temp;
 
-		temp = fillReserved(running[0], runningTotal, queues[0], state, 4, WEEKENDCUTOFF, currentTime, shortMin);
+		temp = fillReserved(running[0], runningTotal, queues[0], state, 4, WEEKENDCUTOFF, currentTime, shortMin, systemTime);
 
 		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
-		temp = fillReserved(running[1], runningTotal, queues[1], state, 3, WEEKENDCUTOFF, currentTime, medMin);
+		temp = fillReserved(running[1], runningTotal, queues[1], state, 3, WEEKENDCUTOFF, currentTime, medMin, systemTime);
 
 		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
-		temp = fillReserved(running[3], runningTotal, queues[3], state, 3, WEEKENDCUTOFF, currentTime, gpuNodes);
+		temp = fillReserved(running[3], runningTotal, queues[3], state, 3, WEEKENDCUTOFF, currentTime, gpuNodes, systemTime);
 		
 		nextJobs.insert(nextJobs.end(), temp.begin(), temp.end());
 
@@ -121,7 +121,7 @@ std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running
 					nextJobs.push_back(temp0);
 					running[0] += temp0->getNodes();
 					runningTotal += temp0->getNodes();
-					queues[0]->removeJob(nShort, currentTime);
+					queues[0]->removeJob(nShort, systemTime);
 					temp0 = queues[0]->nextJob();
 				}
 				else
@@ -133,7 +133,7 @@ std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running
 					nextJobs.push_back(temp1);
 					running[1] += temp1->getNodes();
 					runningTotal += temp1->getNodes();
-					queues[1]->removeJob(nMedium, currentTime);
+					queues[1]->removeJob(nMedium, systemTime);
 					temp1 = queues[1]->nextJob();
 				}
 				else
@@ -145,7 +145,7 @@ std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running
 					nextJobs.push_back(temp2);
 					running[2] += temp2->getNodes();
 					runningTotal += temp2->getNodes();
-					queues[2]->removeJob(nLarge, currentTime);
+					queues[2]->removeJob(nLarge, systemTime);
 					temp2 = queues[2]->nextJob();
 				}
 				else

@@ -11,9 +11,6 @@ User::User(int expoParameter, double budget, std::array<bool,5> permission):
 }
 
 bool User::isTime(double time) {
-    if ((*this).nextJobTime > 24*7){
-        return (*this).nextJobTime-24*7-time<=0;
-    }
     return ((*this).nextJobTime-time<=0);
 }
 

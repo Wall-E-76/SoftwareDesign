@@ -20,7 +20,6 @@ Machine::Machine() {
 }
 
 
-
 Scheduler *Machine::getScheduler() {
     return (*this).scheduler;
 }
@@ -42,10 +41,10 @@ std::vector<Job *> Machine::getJobsRunning() {
     return (*this).jobsRunning;
 }
 
-void Machine::checkJobsRunning(double currentTime) {
+void Machine::checkJobsRunning(double systemTime) {
 	int counter = 0;
 	while (counter < jobsRunning.size()) {
-		if (jobsRunning[counter]->doneRunning(currentTime)) {
+		if (jobsRunning[counter]->doneRunning(systemTime)) {
 			collector(jobsRunning[counter]);
 			jobsRunning.erase(jobsRunning.begin() + counter);  //remove from vector of current jobs
 		}
@@ -55,25 +54,25 @@ void Machine::checkJobsRunning(double currentTime) {
 
 	}
 }
-void Machine::getJobsFromScheduler(double currentTime) {
-	std::vector<Job*> toRun = scheduler->getJobs(state, running, runningTotal, currentTime);
+void Machine::getJobsFromScheduler(double currentTime, double systemTime) {
+	std::vector<Job*> toRun = scheduler->getJobs(state, running, runningTotal, currentTime, systemTime);
 	for (auto e : toRun) {
 		jobsRunning.push_back(e); 
-		e->setTimeLeftQueue(currentTime); //Job has left wait queue and is now started runnning
+		e->setTimeLeftQueue(systemTime); //Job has left wait queue and is now started runnning
 	}
 }
 void Machine::setMachineState(double currentTime) {
 
-	if (currentTime >= STATE5)
-        state = 5;
+	if (currentTime >= STATE5) 
+		state = 5; 
 	else if (currentTime >= STATE4)
 		state = 4;
-	else if (currentTime >= STATE3)
+	else if (currentTime >= STATE3) 
 		state = 3;
-	else if (currentTime >= STATE2)
+	else if (currentTime >= STATE2) 
 		state = 2;
 	else 
-		state = 1;
+		state = 1; 
 }
 
 void Machine::collector(Job* job) {

@@ -121,27 +121,27 @@ Job* Generator::createJob(int i) {
     return job;
 }
 
-void Generator::check(Job *job, double currentTime) {
+void Generator::check(Job *job, double systemTime) {
     double priceJob;
     if (job->getCategory()==3)
         priceJob = job->getRuntime()*MACHINE_COST_GPU*job->getNodes();
     else
         priceJob = job->getRuntime()*MACHINE_COST*job->getNodes();
     if (job->getOwner()->spend(priceJob)) {
-        (*this).queues.at(job->getCategory())->insertJob(job);
-        job->getOwner()->generateNewTime(currentTime);
+        (*this).queues.at(job->getCategory())->insertJob(job, systemTime);
+        job->getOwner()->generateNewTime(systemTime);
     }
      else {
         delete job;
     }
 }
 
-void Generator::lookForJobs(double currentTime) {
+void Generator::lookForJobs(double systemTime) {
     int n = (*this).users.size();
     for (int i=0; i<n;i++) {
-        if ((*this).users.at(i)->isTime(currentTime)) {
+        if ((*this).users.at(i)->isTime(systemTime)) {
             Job* newJob = (*this).createJob(i);
-            (*this).check(newJob, currentTime);
+            (*this).check(newJob, systemTime);
         }
     }
 }

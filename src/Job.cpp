@@ -52,9 +52,7 @@ double Job::getWaitTime() {
 }
 
 bool Job::doneRunning(double time) {
-    if (timeLeftQueue + runtime > 24*7){
-        return timeLeftQueue + runtime - 24*7 <= time;
-    }
+
     return timeLeftQueue + runtime <= time;
 }
 

@@ -30,7 +30,7 @@ private:
 public:
     Queue();
 	/// \brief inserts Job to end of jobsInQueue.
-    void insertJob(Job* job);
+    void insertJob(Job* job, double time);
 	/// \brief returns pointer to first Job in jobsInQueue.
     Job* nextJob();
 	/// \brief returns the index of the first Job in jobsInQueue whose Job::reservedTime is less than or equal to specified 'time'.

@@ -8,7 +8,7 @@
 #include <array>
 #include <iostream>
 #define TIMESTEP 0.5
-#define ENDTIME 24*14
+#define ENDTIME 24*7
 #define SHORTMAXNODES 2
 #define MEDIUMMAXNODES 12
 #define LARGEMAXNODES 64

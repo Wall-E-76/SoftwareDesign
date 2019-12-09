@@ -1,36 +1,36 @@
 group: 0
-budget: 500000
-expDistParam: 10
+budget: 5000000
+expDistParam: 40
 permissions: 0,0,0,0,1
 +
 group: 1
-budget: 5000
-expDistParam: 15
+budget: 5000000000
+expDistParam: 20
 permissions: 0,0,1,0,1
 --
 curriculum: 0
-budget: 20000
-expDistParam: 10
+budget: 2000000000
+expDistParam: 40
 instCap: 20
 permissions: 0,1,0,1,0
 +
 curriculum: 1
-budget: 30000
-expDistParam: 22
+budget: 300000000000
+expDistParam: 78
 instCap: 50
 permissions: 1,1,1,0,0
 --
-numberResearchers: 20
+numberResearchers: 10
 numberResearchersWithGrants: 2
 grants: 14, 4
 +
-numberResearchers: 5
+numberResearchers: 10
 numberResearchersWithGrants: 0
 grants: 
 --
-numberStudents: 20
+numberStudents: 100
 +
-numberStudents: 40
+numberStudents: 100
 --
 
 

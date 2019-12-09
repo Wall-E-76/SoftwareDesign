@@ -6,8 +6,9 @@ Queue::Queue():
 {
 }
 
-void Queue::insertJob(Job *job) {
+void Queue::insertJob(Job *job, double systemTime) {
     (*this).jobsInQueue.push_back(job);
+	job->setTimeEnteredQueue(systemTime);
 }
 
 Job* Queue::nextJob() {

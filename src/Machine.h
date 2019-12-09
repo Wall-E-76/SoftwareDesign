@@ -11,6 +11,7 @@ Jobs running and the state of the Machine attributes.
 #pragma once
 #include <vector>
 #include <array>
+#include <iostream>
 #include "Job.h"
 #include "Queue.h"
 #include "Scheduler.h"
@@ -80,7 +81,7 @@ public:
 	/** \brief will call Sheduler::getJobs and add the returned Jobs to jobsRunning. 
 		Will also set the Job::timeLeftQueue to the currentTime. 
 	*/
-    void getJobsFromScheduler(double currentTime);
+    void getJobsFromScheduler(double currentTime, double systemTime);
 	/// \brief will set the state based on the currentTime.
     void setMachineState(double currentTime);
 	/// \brief will get the current state.

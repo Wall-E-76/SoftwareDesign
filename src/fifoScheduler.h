@@ -57,7 +57,7 @@ public:
 		a Job is added it increases Machine::runningTotal and Machine::running at the appropriate index by the amount stored in Job::nodes. 
 		Then the method returns the vector. 
 	*/
-	std::vector<Job*> getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime);
+	std::vector<Job*> getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime, double systemTime);
 
 private:
 
@@ -81,7 +81,7 @@ private:
 		for the first job in the queue that has a reserved time short enough to be run before cutoffTime.
    */
 	std::vector<Job*> fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,
-		double cutoffTime, double currentTime, int limitNodes);
+		double cutoffTime, double currentTime, int limitNodes, double systemTime);
 
 	/** \brief Private method used by getJobs() to find the oldest job that can be run from a certain queue, returns that job's pointer.
 
