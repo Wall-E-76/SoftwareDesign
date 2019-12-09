@@ -123,10 +123,20 @@ void Machine::report() {
     std::cout << "Machine cost: " << machineCost<< std::endl;
     std::cout << "Price paid: "<< (*this).pricesPaid<< std::endl;
     std::cout << "Machine Hours consumed: "<< machineHoursConsumed << std::endl;
-
+    for (int i = 0; i < 5; i++) {
+        if ((*this).processedByQueue[i] != 0) {
+            std::cout << "Average wait time for queue " << i << ": "
+                      << (*this).waitTimeByQueue[i] / (*this).processedByQueue[i] << std::endl;
+        }
+        else {
+            std::cout << "Average wait time for queue " << i << ": "
+                      << 0 << std::endl;
+        }
+    }
+    std::cout << "Average turn around ratio: "<< averageTurnaroundRatio<< std::endl;
+    std::cout << "Economic balance of the center: "<< (*this).pricesPaid - machineCost<< std::endl;
 	//here will fill in code to output info to a file of a certain name...
 	//probably "weekX_runtime_metrics.txt"
-
 }
 
 
