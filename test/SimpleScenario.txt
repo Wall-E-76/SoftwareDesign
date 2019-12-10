@@ -1,0 +1,19 @@
+group: 0
+budget: 5000000
+expDistParam: 40
+permissions: 0,0,0,0,1
+--
+curriculum: 0
+budget: 2000000000
+expDistParam: 84
+instCap: 200
+permissions: 1,0,0,0,0
+--
+numberResearchers: 0
+numberResearchersWithGrants: 0
+grants:
+--
+numberStudents: 1
+--
+
+

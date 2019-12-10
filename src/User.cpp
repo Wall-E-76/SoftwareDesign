@@ -1,5 +1,6 @@
 
 #include <random>
+#include <iostream>
 #include "User.h"
 
 User::User(int expoParameter, double budget, std::array<bool,5> permission):
@@ -33,7 +34,7 @@ bool User::spend(double newSpendings) {
 void User::generateNewTime(double time) {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::exponential_distribution<> d((*this).expoParameter);
+    std::exponential_distribution<> d(1/(double)(*this).expoParameter);
     (*this).nextJobTime = time + d(gen);
 }
 

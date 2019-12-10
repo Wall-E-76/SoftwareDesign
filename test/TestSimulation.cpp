@@ -35,18 +35,6 @@ void test_initialization(void){
     TEST_ASSERT(g == sim.getGenerator());
 }
 
-void test_computeTimeStep(void){
-    Simulation s (128,3);
-    s.setupFile("./test/inputData.txt");
-    TEST_ASSERT_EQUAL_INT(0,s.getMachine().getJobsRunning().size());
-    TEST_ASSERT_EQUAL_INT(-1,s.getMachine().getMachineState());
-    s.computeTimeSteps();
-    TEST_ASSERT_EQUAL_INT(5,s.getMachine().getMachineState());
-    TEST_ASSERT_EQUAL(0,s.getMachine().getRunningTotal());
-    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getMachine().getProcessedByQueue()[0]);
-    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getQueues()[0]->getJobsInQueue().size());
-}
-
 void test_setupFile(void){
     Simulation s (128,1);
     s.setupFile("./test/inputData.txt");
@@ -98,11 +86,51 @@ void test_setupFile(void){
     }
 }
 
+void test_scenario(void){
+    Simulation s (128,3);
+    s.setupFile("./test/SimpleScenario.txt");
+    s.computeTimeSteps();
+    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getMachine().getProcessedByQueue()[0]);
+    for (int i = 1; i<5; i++){
+        TEST_ASSERT_EQUAL_INT(0,s.getMachine().getProcessedByQueue()[i]);
+    }
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_LESS_OR_EQUAL(1,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_GREATER_OR_EQUAL(0.5*MACHINE_COST,s.getMachine().getPricePaid());
+    TEST_ASSERT_LESS_OR_EQUAL(5*MACHINE_COST, s.getMachine().getPricePaid());
+    TEST_ASSERT_GREATER_OR_EQUAL(0.5, s.getMachine().getMachineHoursConsumed());
+    TEST_ASSERT_LESS_OR_EQUAL(5, s.getMachine().getMachineHoursConsumed());
+    for (int i = 0; i<5; i++){
+        TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine().getWaitTimeByQueue()[i]);
+    }
+    TEST_ASSERT_EQUAL_FLOAT(1, s.getMachine().getTurnaroundRatioSummed()/s.getMachine().getProcessedByQueue()[0]);
+    s.getMachine().resetMetrics();
+    s.setWeekCounter(2);
+
+    s.computeTimeSteps();
+    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getMachine().getProcessedByQueue()[0]);
+    TEST_ASSERT_LESS_OR_EQUAL(5,s.getMachine().getProcessedByQueue()[0]);
+    for (int i = 1; i<5; i++){
+        TEST_ASSERT_EQUAL_INT(0,s.getMachine().getProcessedByQueue()[i]);
+    }
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_LESS_OR_EQUAL(1,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_GREATER_OR_EQUAL(0.5*MACHINE_COST,s.getMachine().getPricePaid());
+    TEST_ASSERT_LESS_OR_EQUAL(5*MACHINE_COST, s.getMachine().getPricePaid());
+    TEST_ASSERT_GREATER_OR_EQUAL(0.5, s.getMachine().getMachineHoursConsumed());
+    TEST_ASSERT_LESS_OR_EQUAL(5, s.getMachine().getMachineHoursConsumed());
+    for (int i = 1; i<5; i++){
+        TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine().getWaitTimeByQueue()[i]);
+    }
+    TEST_ASSERT_LESS_OR_EQUAL(64,s.getMachine().getWaitTimeByQueue()[0]);
+    TEST_ASSERT_LESS_OR_EQUAL(128, s.getMachine().getTurnaroundRatioSummed()/s.getMachine().getProcessedByQueue()[0]);
+}
+
 int main(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_initialization);
-    RUN_TEST(test_computeTimeStep);
     RUN_TEST(test_setupFile);
+    RUN_TEST(test_scenario);
     return UNITY_END();
 }

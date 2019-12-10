@@ -63,5 +63,6 @@ public:
     Generator* getGenerator();
 	/// \brief getter used in Unit testing - returns the Simulation's Machine object.
     Machine getMachine();
+    void setWeekCounter(int week);
 };
 

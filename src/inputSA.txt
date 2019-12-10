@@ -26,7 +26,7 @@ grants: 14, 4
 +
 numberResearchers: 10
 numberResearchersWithGrants: 0
-grants: 
+grants:
 --
 numberStudents: 100
 +

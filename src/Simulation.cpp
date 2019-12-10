@@ -153,7 +153,6 @@ void Simulation::run() {
         (*this).machine.resetMetrics();
 		weekCounter++;
 	}
-
 }
 
 std::array<Queue *, 5> Simulation::getQueues() {
@@ -181,6 +180,10 @@ Generator *Simulation::getGenerator() {
 
 Machine Simulation::getMachine() {
     return (*this).machine;
+}
+
+void Simulation::setWeekCounter(int week) {
+    (*this).weekCounter = week;
 }
 
 

@@ -10,7 +10,7 @@ void setUp(){}
 
 void tearDown(){}
 
-void test_constructor(){
+void test_initialization(){
     Generator g = Generator();
     std::array<PropertyQueue,5> p = g.getProperty();
     TEST_ASSERT_EQUAL_INT(SHORTMAXNODES, p[0].nodeMax);
@@ -28,11 +28,17 @@ void test_constructor(){
     TEST_ASSERT_EQUAL_INT(HUGEMAXNODES, p.at(4).nodeMax);
     TEST_ASSERT_EQUAL_INT(15, p.at(4).nodeMinExclusive);
     TEST_ASSERT_EQUAL_FLOAT(64,p.at(4).timeMax);
-}
 
+    std::array<Queue*,5> queues;
+    for (int i =0; i<5;i++){
+        Queue* q = new Queue();
+        queues[i] = q;
+    }
+    g.addQueues(queues);
+    for (int i =0; i<5;i++){
+        TEST_ASSERT_EQUAL(g.getQueues()[i], queues[i]);
+    }
 
-void test_addUser(void){
-    Generator g = Generator();
     struct Curriculum c = {5,10,60,{1,1,1,0,1}};
     Student* s = new Student(c);
     g.addUser(s);
@@ -85,18 +91,6 @@ void test_createJob(){
     TEST_ASSERT(j->getNodes()!=j2->getNodes()||j->getCategory() != j2->getCategory()||j->getReservedTime()!=j2->getReservedTime()||j->getRuntime()!=j2->getRuntime());
 }
 
-void test_addQueues(void){
-    Generator g = Generator();
-    std::array<Queue*,5> queues;
-    for (int i =0; i<5;i++){
-        Queue* q = new Queue();
-        queues[i] = q;
-    }
-    g.addQueues(queues);
-    for (int i =0; i<5;i++){
-        TEST_ASSERT_EQUAL(g.getQueues()[i], queues[i]);
-    }
-}
 
 void test_check(){
     Generator g = Generator();
@@ -156,11 +150,9 @@ int main(void)
 {
     UNITY_BEGIN();
     RUN_TEST(test_randomCategory);
-    RUN_TEST(test_addUser);
-    RUN_TEST(test_constructor);
+    RUN_TEST(test_initialization);
     RUN_TEST(test_roundUp);
     RUN_TEST(test_createJob);
-    RUN_TEST(test_addQueues);
     RUN_TEST(test_check);
     RUN_TEST(test_lookForJobs);
     return UNITY_END();
