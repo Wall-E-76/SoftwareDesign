@@ -4,7 +4,8 @@
 
 \brief Simulation class.
 
-.........describe here......
+The main driver of the whole Simulation. Creates the instances of the Machine, Scheduler, Queues, and sets up the Users of the Simulation from the details of an input file. 
+Manages the time steps and cycles all the actions, keeping track of the time and the weeks passed. 
 */
 
 #pragma once
@@ -42,16 +43,25 @@ private:
 
 public:
     explicit Simulation(int totalNode, int weeks);
-	/// \brief 
+	/// \brief called after the setUpFile(), this is the method that runs the simulation for the entire duration of weeks specified.
 	void run();
+	/// \brief takes care of the setup of all the objects in the Simulation, and reads the input file to create the Users for this scenario.
 	void setupFile(std::string input);
+	/// \brief called by run(), this method engages all the actions in the Simulation for a single cycle, incrementing the time step until the week is done.
     void computeTimeSteps();
+	/// \brief getter used in Unit testing - returns the array of Queue pointers of the Simulation.
     std::array<Queue*,5> getQueues();
+	/// \brief after the Simulator instantiates a Scheduler object, this method will add pass its pointer to the Machine object.
     void addScheduler(Scheduler* s);
+	/// \brief getter used in Unit testing - returns the Scheduler used in this Simulation.
     Scheduler* getScheduler();
+	/// \brief adds the array of Queue pointers to itself.
     void addQueues(std::array<Queue*,5> queues);
+	/// \brief adds the pointer to the Generator to itself.
     void addGenerator(Generator* g);
+	/// \brief getter used in Unit testing - returns the pointer to Simulation's Generator.
     Generator* getGenerator();
+	/// \brief getter used in Unit testing - returns the Simulation's Machine object.
     Machine getMachine();
 };
 

@@ -96,11 +96,7 @@ private:
 	 \param queue index in vector of queues of queue we are looking at
 	 \param currentTime value of current time of the week, in hours.
 	 \return pointer to oldest Job currently able to run from this Queue.
-	FIFOScheduler();
-	std::vector<Job*> getJobs(int status, std::array <int, 5>& running, int& runningTotal, double currentTime) override;
-	std::vector<Job*> fillReserved(int& running, int& runningTotal, Queue*& queue, int status, int statusCheck,
-		int cutoffTime, double currentTime, int limitNodes);
-	 
+
 */
 	Job* oldestCheck(int& oldest, double& oldestTime, int& n, int state,int stateCheck, 
 		double cutoffTime, int queue, double currentTime);
