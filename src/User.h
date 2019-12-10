@@ -26,6 +26,7 @@ public:
     void generateNewTime(double time);
     double getBudget();
     double getSpendings();
+    int getExpoParameter();
     virtual bool spend(double newSpendings)=0;
     std::array<bool,5> getPermission();
 };

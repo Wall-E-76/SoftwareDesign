@@ -43,13 +43,14 @@ private:
 public:
     explicit Simulation(int totalNode, int weeks);
 	void run();
-    void setup();
 	void setupFile(std::string input);
     void computeTimeSteps();
-    void output();
     std::array<Queue*,5> getQueues();
     void addScheduler(Scheduler* s);
+    Scheduler* getScheduler();
     void addQueues(std::array<Queue*,5> queues);
     void addGenerator(Generator* g);
+    Generator* getGenerator();
+    Machine getMachine();
 };
 

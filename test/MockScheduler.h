@@ -5,7 +5,7 @@
 class MockScheduler : public Scheduler {
 public:
     MockScheduler();
-    std::vector<Job*> getJobs(int state, std::array <int,5> &running, int &runningTotal, double currentTime);
+    std::vector<Job*> getJobs(int state, std::array <int,5> &running, int &runningTotal, double currentTime, double systemTime);
 
 };
 

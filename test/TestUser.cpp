@@ -15,6 +15,7 @@ void test_getter(void){
     for (int i =0; i<5; i++){
         TEST_ASSERT_EQUAL_INT(p[i],s->getPermission()[i]);
     }
+    TEST_ASSERT_EQUAL_INT(10,s->getExpoParameter());
 }
 
 void test_time(void){

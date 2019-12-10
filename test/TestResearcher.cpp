@@ -15,8 +15,9 @@ void test_getter(void){
 void test_spend(void){
     struct Group g = {5,10,{1,1,1,0,1}};
     Researcher* r = new Researcher(g,15);
-    TEST_ASSERT(r->spend(18));
-    TEST_ASSERT_EQUAL_INT(18,r->getSpendings());
+    TEST_ASSERT(r->spend(10))
+    TEST_ASSERT(r->spend(8.1));
+    TEST_ASSERT_EQUAL_INT(18.1,r->getSpendings());
     TEST_ASSERT(!r->spend(10));
 }
 

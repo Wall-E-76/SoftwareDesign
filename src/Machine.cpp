@@ -2,8 +2,6 @@
 #include <iostream>
 #include "Machine.h"
 
-//comments: might not need to be linked to queue?
-// also, make sure that Job->category refers to short, med, large, gpu, and huge, in that order
 Machine::Machine() {
 
 	for (int i = 0; i < 5; i++) {
@@ -15,8 +13,8 @@ Machine::Machine() {
 	machineHoursConsumed = 0.0;
 	pricesPaid = 0.0;
     runningTotal = 0;
-	state = -1; // added these, not sure if right
-	scheduler = nullptr; //^^
+	state = -1;
+	scheduler = nullptr;
 }
 
 
@@ -61,18 +59,19 @@ void Machine::getJobsFromScheduler(double currentTime, double systemTime) {
 		e->setTimeLeftQueue(systemTime); //Job has left wait queue and is now started runnning
 	}
 }
+
 void Machine::setMachineState(double currentTime) {
 
-	if (currentTime >= STATE5) 
-		state = 5; 
+	if (currentTime >= STATE5)
+		state = 5;
 	else if (currentTime >= STATE4)
 		state = 4;
-	else if (currentTime >= STATE3) 
+	else if (currentTime >= STATE3)
 		state = 3;
-	else if (currentTime >= STATE2) 
+	else if (currentTime >= STATE2)
 		state = 2;
-	else 
-		state = 1; 
+	else
+		state = 1;
 }
 
 void Machine::collector(Job* job) {

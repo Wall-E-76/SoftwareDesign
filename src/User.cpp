@@ -41,5 +41,9 @@ std::array<bool,5> User::getPermission() {
     return (*this).permission;
 }
 
+int User::getExpoParameter() {
+    return (*this).expoParameter;
+}
+
 
 

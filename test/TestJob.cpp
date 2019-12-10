@@ -30,7 +30,6 @@ void test_doneRunning(void){
     Student* s;
     Job j = Job(s, 1, 16, 1, 20.1, 25.1);
     j.setTimeEnteredQueue(0.2);
-    j.setTimeLeftQueue(10.4);
     TEST_ASSERT(!j.doneRunning(15));
     TEST_ASSERT(j.doneRunning(30.6));
 }

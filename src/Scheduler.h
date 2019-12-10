@@ -18,6 +18,5 @@ public:
     std::array<Queue *, 5> getQueues();
 	
 protected:
-	std::vector <Job*> nextUp;
     std::array <Queue*,5> queues;
 };
