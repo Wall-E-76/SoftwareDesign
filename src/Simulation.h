@@ -42,6 +42,7 @@ private:
 
 public:
     explicit Simulation(int totalNode, int weeks);
+	/// \brief 
 	void run();
 	void setupFile(std::string input);
     void computeTimeSteps();

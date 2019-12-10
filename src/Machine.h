@@ -59,14 +59,23 @@ private:
 	Scheduler* scheduler; 
 public:
     Machine();
+	/// \brief getter used in Unit testing - returns pointer to Machine's Schedueler.
 	Scheduler* getScheduler();
-    std::array<Queue*,5> getQueues();
+	/// \brief getter used in Unit testing - returns Machine's vector of Queue pointers
+	std::array<Queue*, 5> getQueues();
+	/// \brief getter used in Unit testing - returuns Machine's vector of currently running Jobs.
     std::vector <Job*> getJobsRunning();
+	/// \brief getter used in Unit testing - returns Machine's array of nodes running per Job type.
     std::array <int, 5> getRunning();
+	/// \brief getter used in Unit testing - returns Machine's array of Jobs processed by Queue.
     std::array <int, 5> getProcessedByQueue();
+	/// \brief getter used in Unit testing - returns Machine's array of total wait times by Queue.
     std::array<double, 5> getWaitTimeByQueue();
+	/// \brief getter used in Unit testing - returns the summed turn arround ratio.
     double getTurnaroundRatioSummed();
+	/// \brief getter used in Unit testing - returns total Machine hours consumed so far in Simulation.
     double getMachineHoursConsumed();
+	/// \brief getter used in Unit testing - returns total budgets spent so far in Simulation. 
     double getPricePaid();
 	/// \brief method to add a Scheduler to this Machine. 
 	void addScheduler(Scheduler* schedulerArg);

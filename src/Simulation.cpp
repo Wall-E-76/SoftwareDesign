@@ -32,9 +32,10 @@ void Simulation::setupFile(std::string input) {
 	std::string space = " ";
 	//add groups
 	while (true) {
+		std::getline(in, line); //first line of element/section
+		if (line == "--")  break; //break if empty section
 		double paramGroup;
 		struct Group group {};
-		std::getline(in, line); //group # line
 		std::getline(in, line); //budget line
 		paramGroup = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		group.budget = paramGroup;
@@ -56,9 +57,10 @@ void Simulation::setupFile(std::string input) {
 	std::vector <struct Curriculum> curriculums;
 	//add curriculums
 	while (true) {
+		std::getline(in, line); //first line of element/section
+		if (line == "--") break; //break if section is empty
 		double paramCurriculum;
 		struct Curriculum curriculum {};
-		std::getline(in, line); //curriculum # line
 		std::getline(in, line); //budget line
 		paramCurriculum = std::stod(line.substr(line.find(space) + 1, line.size() - 1));
 		curriculum.budget = paramCurriculum;
@@ -84,9 +86,10 @@ void Simulation::setupFile(std::string input) {
 	//create researchers by group
 	int groupNumber = 0;
 	while (true) {
+		std::getline(in, line); //number of researchers
+		if (groups.empty()) break; //no researchers
 		int groupSize; //number of people in group
 		int grantMembers; //number of people with grant in group
-		std::getline(in, line); //number of researchers
 		groupSize = std::stoi(line.substr(line.find(space) + 1, line.size() - 1));
 		std::getline(in, line); //number of researchers with grant
 		grantMembers = std::stoi(line.substr(line.find(space) + 1, line.size() - 1));
@@ -115,8 +118,9 @@ void Simulation::setupFile(std::string input) {
 	//create students by curriculum
 	int curriNumber = 0;
 	while (true) {
-		int groupSize;
 		std::getline(in, line); //number of students
+		if (curriculums.empty()) break; //no students
+		int groupSize;
 		groupSize = std::stoi(line.substr(line.find(space) + 1, line.size() - 1));
 		for (int i = 0; i < groupSize; i++) {
 			Student* s = new Student(curriculums[curriNumber]);

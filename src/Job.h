@@ -4,7 +4,7 @@
 
 \brief Job class.
 
-Job will self-contain all of its information, and a pointer to it will be passed around throughout the program. Once the Job is done running, it will
+Will self-contain all of its information, and a pointer to it will be passed around throughout the program. Once the Job is done running, it will
 be used to calculate the metrics of the Simulation with Machine::collector.
  
 */

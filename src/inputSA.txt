@@ -32,5 +32,3 @@ numberStudents: 100
 +
 numberStudents: 100
 --
-
-
