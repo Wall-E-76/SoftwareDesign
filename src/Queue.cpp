@@ -1,10 +1,7 @@
-
 #include "Queue.h"
 
-Queue::Queue():
-    jobsInQueue({})
-{
-}
+Queue::Queue():jobsInQueue({})
+{}
 
 void Queue::insertJob(Job *job, double systemTime) {
     (*this).jobsInQueue.push_back(job);
@@ -49,11 +46,3 @@ int Queue::nextJobT(double time) {
 	}
 	return -1;
 }
-
-
-
-
-
-
-
-

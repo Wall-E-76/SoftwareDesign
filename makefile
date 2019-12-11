@@ -23,12 +23,14 @@ PATHB = build/
 PATHD = build/depends/
 PATHO = build/objs/
 PATHR = build/results/
+PATHBIN = build/bin/
 
-BUILD_PATHS = $(PATHB) $(PATHD) $(PATHO) $(PATHR)
+BUILD_PATHS = $(PATHB) $(PATHD) $(PATHO) $(PATHR) $(PATHBIN)
+BUILD_PATH_BIN = $(PATHB) $(PATHBIN)
 
 SRCT = $(wildcard $(PATHT)*.cpp)
 
-COMPILE=g++ -std=c++11 -c
+COMPILE=g++ -std=c++11
 LINK=g++ -std=c++11
 DEPEND=g++ -std=c++11 -MM -MG -MF
 CFLAGS=-I. -I$(PATHU) -I$(PATHS) -DTEST
@@ -55,13 +57,13 @@ $(PATHB)Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHU)unity.o #
 	$(LINK) -o $@ $^
 
 $(PATHO)%.o:: $(PATHT)%.cpp
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(COMPILE) -c $(CFLAGS) $< -o $@
 
 $(PATHO)%.o:: $(PATHS)%.cpp
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(COMPILE) -c $(CFLAGS) $< -o $@
 
 $(PATHO)%.o:: $(PATHU)%.cpp $(PATHU)%.h
-	$(COMPILE) $(CFLAGS) $< -o $@
+	$(COMPILE) -c $(CFLAGS) $< -o $@
 
 $(PATHD)%.d:: $(PATHT)%.cpp
 	$(DEPEND) $@ $<
@@ -77,11 +79,17 @@ $(PATHO):
 
 $(PATHR):
 	$(MKDIR) $(PATHR)
+$(PATHBIN):
+	$(MKDIR) $(PATHBIN)
+
+install: $(BUILD_PATH_BIN)
+	$(COMPILE) -lm src/*.cpp ./*.cpp -o $(PATHBIN)runSimulation
 
 clean:
 	$(CLEANUP) $(PATHO)*.o
 	$(CLEANUP) $(PATHB)*.$(TARGET_EXTENSION)
 	$(CLEANUP) $(PATHR)*.txt
+	$(CLEANUP) $(PATHBIN)runSimulation
 
 .PRECIOUS: $(PATHB)Test%.$(TARGET_EXTENSION)
 .PRECIOUS: $(PATHD)%.d

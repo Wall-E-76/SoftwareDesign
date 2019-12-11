@@ -89,6 +89,13 @@ void test_createJob(){
     TEST_ASSERT_EQUAL_FLOAT(0,j->getTimeEnteredQueue());
     Job* j2 = g.createJob(1);
     TEST_ASSERT(j->getNodes()!=j2->getNodes()||j->getCategory() != j2->getCategory()||j->getReservedTime()!=j2->getReservedTime()||j->getRuntime()!=j2->getRuntime());
+
+    struct Curriculum c2 = {5,10,60,{0,0,0,1,0}};
+    Student* s3 = new Student(c2);
+    g.addUser(s3);
+    Job* j3 = g.createJob(2);
+    TEST_ASSERT_EQUAL_INT(3,j3->getCategory());
+
 }
 
 

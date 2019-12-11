@@ -25,7 +25,6 @@ Generator::Generator(int totlNodes) {
 	hugeQueue.nodeMax = HUGEMAXNODES;
 	hugeQueue.nodeMinExclusive = 15; //lets say Huge jobs cant run jobs  on fewer than 16 nodes
 	hugeQueue.timeMax = 64;
-
 	(*this).property = { shortQueue, medQueue, largeQueue, GPUQueue, hugeQueue };
 }
 
@@ -51,9 +50,6 @@ void Generator::addUser(User *user) {
 void Generator::addQueues(std::array<Queue*,5> queues) {
     (*this).queues = queues;
 }
-
-
-
 
 int Generator::randomCategory(int i) {
     int sum=0;
@@ -92,11 +88,9 @@ Job* Generator::createJob(int i) {
     int cores;
     int coreMax = (*this).property.at(category).nodeMax*16;
 	int coreMin = (*this).property.at(category).nodeMinExclusive * 16;
-	coreMin++; //so now it will need to use mininum the # of nodes above the specficied nodeMinExclusive
-  
+	coreMin++;
     std::normal_distribution<double> norm((coreMax+coreMin)/2, (coreMax - coreMin) / 2);
     cores = floor(norm(generator));
-    
     if (cores>coreMax)
         cores = coreMax;
     else if (cores<coreMin)
@@ -117,7 +111,6 @@ Job* Generator::createJob(int i) {
     else if (runtime<TIMESTEP)
         runtime=TIMESTEP;
     Job* job = new Job(owner, category, cores, GPU, runtime, reservedTime);
-	//if (category == 2)std::cout << "large job created" << std::endl;
     return job;
 }
 
@@ -131,7 +124,7 @@ void Generator::check(Job *job, double systemTime) {
         (*this).queues.at(job->getCategory())->insertJob(job, systemTime);
         job->getOwner()->generateNewTime(systemTime);
     }
-     else {
+    else {
         delete job;
     }
 }
@@ -156,14 +149,3 @@ double Generator::roundUp(double time){
     }
     return roundUp;
 }
-
-
-
-
-
-
-
-
-
-
-

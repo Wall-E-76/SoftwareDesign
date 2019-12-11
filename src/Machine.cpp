@@ -103,38 +103,29 @@ void Machine::report() {
     std::cout << std::endl;
     std::cout<< "Weekly report: "<<std::endl;
 	int totalJobsProcessed = 0;
-
 	for (int i = 0; i < 5; i++) {
         std::cout << "Total jobs processed in queue "<<i<<": " << processedByQueue[i]<< std::endl;
 		totalJobsProcessed += processedByQueue[i];
 	}
-
 	double machineCost = WEEKENDCUTOFF * (totalNodes - gpuNodes) * MACHINE_COST;
 	machineCost+= WEEKENDCUTOFF * (gpuNodes) * MACHINE_COST_GPU;
 	machineCost += (WEEKDAYCUTOFF - WEEKENDCUTOFF) * totalNodes * MACHINE_COST;
-
 	double utilizationRatio = machineHoursConsumed / (double(WEEKDAYCUTOFF) * totalNodes);
-
 	double averageTurnaroundRatio = turnaroundRatiosSummed / totalJobsProcessed;
-
 	std::cout << "Utilization Ratio: " << utilizationRatio<< std::endl;
     std::cout << "Machine cost: " << machineCost<< std::endl;
     std::cout << "Price paid: "<< (*this).pricesPaid<< std::endl;
     std::cout << "Machine Hours consumed: "<< machineHoursConsumed << std::endl;
     for (int i = 0; i < 5; i++) {
         if ((*this).processedByQueue[i] != 0) {
-            std::cout << "Average wait time for queue " << i << ": "
-                      << (*this).waitTimeByQueue[i] / (*this).processedByQueue[i] << std::endl;
+            std::cout << "Average wait time for queue " << i << ": "<< (*this).waitTimeByQueue[i] / (*this).processedByQueue[i] << std::endl;
         }
         else {
-            std::cout << "Average wait time for queue " << i << ": "
-                      << 0 << std::endl;
+            std::cout << "Average wait time for queue " << i << ": "<< 0 << std::endl;
         }
     }
     std::cout << "Average turn around ratio: "<< averageTurnaroundRatio<< std::endl;
     std::cout << "Economic balance of the center: "<< (*this).pricesPaid - machineCost<< std::endl;
-	//here will fill in code to output info to a file of a certain name...
-	//probably "weekX_runtime_metrics.txt"
 }
 
 

@@ -11,7 +11,7 @@ void test_getter(void){
     std::array <bool,5> p = {1,1,1,0,0};
     struct Curriculum c {20, 5, 5, p};
     Student* s;
-    Job j = Job(s, 1, 16, 1, 20.1, 25.1);
+    Job j = Job(s, 1, 15, 1, 20.1, 25.1);
     TEST_ASSERT_EQUAL_INT(1, j.getNodes());
     TEST_ASSERT_EQUAL_INT(1,j.getCategory());
     TEST_ASSERT(j.needsGPU());
@@ -22,6 +22,7 @@ void test_getter(void){
     j.setTimeLeftQueue(10.4);
     TEST_ASSERT_EQUAL_FLOAT(10.4, j.getTimeLeftQueue());
     TEST_ASSERT(s == j.getOwner());
+    TEST_ASSERT_EQUAL_FLOAT(10.2, j.getWaitTime());
 }
 
 void test_doneRunning(void){

@@ -1,4 +1,3 @@
-
 #include <random>
 #include <iostream>
 #include "User.h"
@@ -21,14 +20,6 @@ double User::getBudget() {
 
 double User::getSpendings() {
     return (*this).spendings;
-}
-
-bool User::spend(double newSpendings) {
-    if ((*this).spendings+newSpendings < (*this).budget){
-        (*this).spendings += newSpendings;
-        return true;
-    }
-    return false;
 }
 
 void User::generateNewTime(double time) {

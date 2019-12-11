@@ -1,12 +1,9 @@
-
 #include "Student.h"
-
 
 Student::Student(struct Curriculum curriculum) :
         User(curriculum.expoParameter, curriculum.budget, curriculum.permission),
         instResourceCap(curriculum.instResourceCap)
-        {
-}
+        {}
 
 int Student::getInstResourceCapt() {
     return (*this).instResourceCap;
