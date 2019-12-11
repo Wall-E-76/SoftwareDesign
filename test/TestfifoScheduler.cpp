@@ -44,17 +44,19 @@ void test_oldestCheck(void) {
 	TEST_ASSERT(oldest == 0);
 	TEST_ASSERT(oldestTime == 93); //this is the time the one job entered the queue
 	TEST_ASSERT(nShort == 0); //should be 0, index of first job in queue
-	temp = fifo.oldestCheck(oldest, oldestTime, nMedium, state, 3, WEEKENDCUTOFF, 1, t);
+	TEST_ASSERT(temp->getTimeEnteredQueue()==93);
+        temp = fifo.oldestCheck(oldest, oldestTime, nMedium, state, 3, WEEKENDCUTOFF, 1, t);
 	TEST_ASSERT(qs[1]->getJobsInQueue().size() == 0); //should be no jobs in this queue
 	TEST_ASSERT(oldest == 0); //should still be unchanged because no jobs in this queue
 	TEST_ASSERT(oldestTime == 93); //this is the time the one job entered the queue
-	TEST_ASSERT(nMed == 0); //should be unchanged
+	TEST_ASSERT(nMedium == 0); //should be unchanged
+        TEST_ASSERT(temp==nullptr);
 	temp = fifo.oldestCheck(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, t);
 	TEST_ASSERT(qs[2]->getJobsInQueue().size() == 1); //should have one left in queue
 	TEST_ASSERT(oldest == 2); //should now be considered queue with oldest job
 	TEST_ASSERT(oldestTime == 88); //should be the time the second job in line entered the queue
 	TEST_ASSERT(nLarge == 1); //should be index of second job in queue
-
+        TEST_ASSERT(temp->getTimeEnteredQueue()==88);
 }
 
 void test_fillReserved(void) {
@@ -78,7 +80,7 @@ void test_fillReserved(void) {
 	int state = 2; //start of in a state where there is no need to check time
 	results = fifo.fillReserved(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
 	TEST_ASSERT(results.size() == 2); //should only have taken first two jobs
-	TEST_ASSERT(q.getJobsInQueue().size()==1); //still one guy waiting in line
+	TEST_ASSERT(q->getJobsInQueue().size()==1); //still one guy waiting in line
 	TEST_ASSERT_EQUAL_INT(39, running); //should have increased nodes running to 39
 	TEST_ASSERT_EQUAL_INT(39, runningTotal); //should have increased nodes running to 39
 	running =30; runningTotal=30; //reset these to run new tests here
