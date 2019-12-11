@@ -59,6 +59,9 @@ public:
 	*/
 	std::vector<Job*> getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime, double systemTime);
 
+	std::vector<Job*> fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,
+		double cutoffTime, double currentTime, int limitNodes, double systemTime);
+
 private:
 
 	/** \brief Private method used by ::getJobs() to fill reserved portions of machine.
@@ -80,8 +83,6 @@ private:
 		Will also intelligently check the first job's reserved time in the case that state equals or exeeds stateCheck value, and might look instead
 		for the first job in the queue that has a reserved time short enough to be run before cutoffTime.
    */
-	std::vector<Job*> fillReserved(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,
-		double cutoffTime, double currentTime, int limitNodes, double systemTime);
 
 	/** \brief Private method used by getJobs() to find the oldest job that can be run from a certain queue, returns that job's pointer.
 
