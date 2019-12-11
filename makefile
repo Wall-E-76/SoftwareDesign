@@ -28,9 +28,9 @@ BUILD_PATHS = $(PATHB) $(PATHD) $(PATHO) $(PATHR)
 
 SRCT = $(wildcard $(PATHT)*.cpp)
 
-COMPILE=g++ -c
-LINK=g++
-DEPEND=g++ -MM -MG -MF
+COMPILE=g++ -std=c++11 -c
+LINK=g++ -std=c++11
+DEPEND=g++ -std=c++11 -MM -MG -MF
 CFLAGS=-I. -I$(PATHU) -I$(PATHS) -DTEST
 
 RESULTS = $(patsubst $(PATHT)Test%.cpp,$(PATHR)Test%.txt,$(SRCT) )

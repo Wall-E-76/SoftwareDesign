@@ -62,7 +62,7 @@ public:
 	/// \brief getter used in Unit testing - returns the pointer to Simulation's Generator.
     Generator* getGenerator();
 	/// \brief getter used in Unit testing - returns the Simulation's Machine object.
-    Machine getMachine();
+    Machine* getMachine();
     void setWeekCounter(int week);
 };
 

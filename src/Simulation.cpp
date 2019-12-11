@@ -146,7 +146,7 @@ void Simulation::computeTimeSteps() {
 
 void Simulation::run() {
 
-    (*this).setupFile("../src/inputSA.txt"); // Or change to inputSA.txt
+    (*this).setupFile("./src/inputSA.txt"); // Or change to inputSA.txt
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();
         (*this).machine.report();
@@ -178,8 +178,8 @@ Generator *Simulation::getGenerator() {
     return (*this).generator;
 }
 
-Machine Simulation::getMachine() {
-    return (*this).machine;
+Machine* Simulation::getMachine() {
+    return &(*this).machine;
 }
 
 void Simulation::setWeekCounter(int week) {

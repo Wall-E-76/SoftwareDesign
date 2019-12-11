@@ -6,7 +6,7 @@ permissions: 0,0,0,0,1
 curriculum: 0
 budget: 2000000000
 expDistParam: 84
-instCap: 200
+instCap: 2000
 permissions: 1,0,0,0,0
 --
 numberResearchers: 0

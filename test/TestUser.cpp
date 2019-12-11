@@ -19,12 +19,12 @@ void test_getter(void){
 }
 
 void test_time(void){
-    struct Curriculum c = {5,10,60,{1,1,1,0,1}};
+    struct Curriculum c = {5,5,60,{1,1,1,0,1}};
     Student* s = new Student(c);
     TEST_ASSERT(s->isTime(1.0));
     s->generateNewTime(2);
     TEST_ASSERT(!s->isTime(2));
-    TEST_ASSERT(s->isTime(13));
+    TEST_ASSERT(s->isTime(25));
 }
 
 int main(void)

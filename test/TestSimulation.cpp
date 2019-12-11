@@ -1,4 +1,5 @@
 #include "../unity/src/unity.h"
+#include <chrono>
 #include "src/Simulation.h"
 #include "MockScheduler.cpp"
 #include "src/Queue.cpp"
@@ -90,40 +91,71 @@ void test_scenario(void){
     Simulation s (128,3);
     s.setupFile("./test/SimpleScenario.txt");
     s.computeTimeSteps();
-    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getMachine().getProcessedByQueue()[0]);
+    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getMachine()->getProcessedByQueue()[0]);
     for (int i = 1; i<5; i++){
-        TEST_ASSERT_EQUAL_INT(0,s.getMachine().getProcessedByQueue()[i]);
+        TEST_ASSERT_EQUAL_INT(0,s.getMachine()->getProcessedByQueue()[i]);
     }
-    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
-    TEST_ASSERT_LESS_OR_EQUAL(1,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
-    TEST_ASSERT_GREATER_OR_EQUAL(0.5*MACHINE_COST,s.getMachine().getPricePaid());
-    TEST_ASSERT_LESS_OR_EQUAL(5*MACHINE_COST, s.getMachine().getPricePaid());
-    TEST_ASSERT_GREATER_OR_EQUAL(0.5, s.getMachine().getMachineHoursConsumed());
-    TEST_ASSERT_LESS_OR_EQUAL(5, s.getMachine().getMachineHoursConsumed());
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine()->getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_LESS_OR_EQUAL(0,s.getMachine()->getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine()->getPricePaid());
+    TEST_ASSERT_LESS_OR_EQUAL(6*MACHINE_COST, s.getMachine()->getPricePaid());
+    TEST_ASSERT_GREATER_OR_EQUAL(0, s.getMachine()->getMachineHoursConsumed());
+    TEST_ASSERT_LESS_OR_EQUAL(6, s.getMachine()->getMachineHoursConsumed());
     for (int i = 0; i<5; i++){
-        TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine().getWaitTimeByQueue()[i]);
+        TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine()->getWaitTimeByQueue()[i]);
     }
-    TEST_ASSERT_EQUAL_FLOAT(1, s.getMachine().getTurnaroundRatioSummed()/s.getMachine().getProcessedByQueue()[0]);
-    s.getMachine().resetMetrics();
+    TEST_ASSERT_EQUAL_FLOAT(1, s.getMachine()->getTurnaroundRatioSummed()/s.getMachine()->getProcessedByQueue()[0]);
+    s.getMachine()->resetMetrics();
     s.setWeekCounter(2);
 
     s.computeTimeSteps();
-    TEST_ASSERT_GREATER_OR_EQUAL(1,s.getMachine().getProcessedByQueue()[0]);
-    TEST_ASSERT_LESS_OR_EQUAL(5,s.getMachine().getProcessedByQueue()[0]);
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine()->getProcessedByQueue()[0]);
+    TEST_ASSERT_LESS_OR_EQUAL(8,s.getMachine()->getProcessedByQueue()[0]);
     for (int i = 1; i<5; i++){
-        TEST_ASSERT_EQUAL_INT(0,s.getMachine().getProcessedByQueue()[i]);
+        TEST_ASSERT_EQUAL_INT(0,s.getMachine()->getProcessedByQueue()[i]);
     }
-    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
-    TEST_ASSERT_LESS_OR_EQUAL(1,s.getMachine().getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
-    TEST_ASSERT_GREATER_OR_EQUAL(0.5*MACHINE_COST,s.getMachine().getPricePaid());
-    TEST_ASSERT_LESS_OR_EQUAL(5*MACHINE_COST, s.getMachine().getPricePaid());
-    TEST_ASSERT_GREATER_OR_EQUAL(0.5, s.getMachine().getMachineHoursConsumed());
-    TEST_ASSERT_LESS_OR_EQUAL(5, s.getMachine().getMachineHoursConsumed());
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine()->getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_LESS_OR_EQUAL(1,s.getMachine()->getMachineHoursConsumed()/(double(WEEKDAYCUTOFF) * totalNodes));
+    TEST_ASSERT_GREATER_OR_EQUAL(0,s.getMachine()->getPricePaid());
+    TEST_ASSERT_LESS_OR_EQUAL(8*MACHINE_COST, s.getMachine()->getPricePaid());
+    TEST_ASSERT_GREATER_OR_EQUAL(0, s.getMachine()->getMachineHoursConsumed());
+    TEST_ASSERT_LESS_OR_EQUAL(8, s.getMachine()->getMachineHoursConsumed());
     for (int i = 1; i<5; i++){
-        TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine().getWaitTimeByQueue()[i]);
+        TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine()->getWaitTimeByQueue()[i]);
     }
-    TEST_ASSERT_LESS_OR_EQUAL(64,s.getMachine().getWaitTimeByQueue()[0]);
-    TEST_ASSERT_LESS_OR_EQUAL(128, s.getMachine().getTurnaroundRatioSummed()/s.getMachine().getProcessedByQueue()[0]);
+    if (s.getMachine()->getProcessedByQueue()[0] != 0){
+        TEST_ASSERT_LESS_OR_EQUAL(64,s.getMachine()->getWaitTimeByQueue()[0]/(s.getMachine()->getProcessedByQueue()[0]+1));
+        TEST_ASSERT_LESS_OR_EQUAL(128, s.getMachine()->getTurnaroundRatioSummed()/s.getMachine()->getProcessedByQueue()[0]);
+    }
+    else {
+        TEST_ASSERT_LESS_OR_EQUAL(0,s.getMachine()->getWaitTimeByQueue()[0]);
+    }
+
+}
+
+void test_performance(void){
+    double time =0;
+    Simulation s (128,10);
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    s.run();
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    time = std::chrono::duration_cast<std::chrono::seconds> (end - begin).count();
+    TEST_ASSERT_LESS_OR_EQUAL(5, time/10);
+}
+
+void test_Volume(void){
+    double time = 0;
+    Simulation s (128,3);
+    s.setupFile("./test/StressScenario.txt");
+    for (int i = 0; i< 10; i++){
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        s.computeTimeSteps();
+        s.getMachine()->resetMetrics();
+        s.setWeekCounter(i+1);
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        time += std::chrono::duration_cast<std::chrono::seconds> (end - begin).count();
+    }
+    TEST_ASSERT_LESS_OR_EQUAL(5, time/10);
 }
 
 int main(void)
@@ -132,5 +164,7 @@ int main(void)
     RUN_TEST(test_initialization);
     RUN_TEST(test_setupFile);
     RUN_TEST(test_scenario);
+    RUN_TEST(test_performance);
+    RUN_TEST(test_Volume);
     return UNITY_END();
 }
