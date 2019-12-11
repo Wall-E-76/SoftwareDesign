@@ -21,8 +21,6 @@ void test_addQueues(void){
     TEST_ASSERT(s->getQueues().at(4)==q4);
 }
 
-
-
 int main(void)
 {
     UNITY_BEGIN();

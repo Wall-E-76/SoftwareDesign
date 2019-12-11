@@ -1,13 +1,33 @@
 # SoftwareDesign
+To install the software:
+
+    git clone https://github.com/Wall-E-76/SoftwareDesign.git 
 
 To run the tests:
 
-    Make a folder called unity
+- Go to the software's folder
     
-    In that folder, git clone https://github.com/ThrowTheSwitch/Unity.git
+- Copy the Unity repository :
+ 
+        git clone https://github.com/ThrowTheSwitch/Unity.git
     
-    Move the files from ./unity/Unity/* to unity./*
+- Rename the folder `unity`
+
+        mv ./Unity/* ./unity    
+        
+- Run the test in the command line:
+
+        make test
+
+To compile the software: 
+
+    make install
     
-    Run the test in the command line by using make test
+To run the simulation:
+
+    ./build/bin/runSimulation
+
+To  delete all compiled files:
+
+    make clean
     
-    make clean allows to clean the objects/results created with make test
