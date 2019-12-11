@@ -1,4 +1,3 @@
-
 #include "Job.h"
 
 Job::Job(User *owner, int category, int cores, bool GPU, double runtime, double reservedTime):
@@ -47,17 +46,16 @@ double Job::getTimeLeftQueue() {
     return (*this).timeLeftQueue;
 }
 
+void Job::setTimeLeftQueue(double time) {
+    (*this).timeLeftQueue = time;
+}
+
 double Job::getWaitTime() {
 	return (*this).timeLeftQueue-(*this).timeEnteredQueue;
 }
 
 bool Job::doneRunning(double time) {
-
     return timeLeftQueue + runtime <= time;
-}
-
-void Job::setTimeLeftQueue(double time) {
-    (*this).timeLeftQueue = time;
 }
 
 User *Job::getOwner() {

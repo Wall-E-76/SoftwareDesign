@@ -1,6 +1,4 @@
-
 #include "Simulation.h"
-
 
 Simulation::Simulation(int totalNode, int weeks) :
         currentTime(0),
@@ -114,7 +112,6 @@ void Simulation::setupFile(std::string input) {
 		if (line == "--") break;
 		groupNumber++;
 	}
-
 	//create students by curriculum
 	int curriNumber = 0;
 	while (true) {
@@ -143,9 +140,7 @@ void Simulation::computeTimeSteps() {
     currentTime = 0;
 }
 
-
 void Simulation::run() {
-
     (*this).setupFile("./src/inputSA.txt"); // Or change to inputSA.txt
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();
@@ -185,6 +180,3 @@ Machine* Simulation::getMachine() {
 void Simulation::setWeekCounter(int week) {
     (*this).weekCounter = week;
 }
-
-
-

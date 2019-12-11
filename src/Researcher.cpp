@@ -1,4 +1,3 @@
-
 #include "Researcher.h"
 
 Researcher::Researcher(struct Group group, double grant) :

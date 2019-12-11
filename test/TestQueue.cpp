@@ -22,6 +22,7 @@ void test_insertJob(void){
 
 void test_accessJob(void){
     Queue* q = new Queue();
+    TEST_ASSERT(nullptr == q->nextJob());
     Student* student;
     Job* j1 = new Job(student,0,5,0,1.2,1.3);
     q->insertJob(j1,0.1);
@@ -33,6 +34,9 @@ void test_accessJob(void){
 
     TEST_ASSERT(j1 == q->getJobAt(0))
     TEST_ASSERT(j2 == q->getJobAt(1));
+    TEST_ASSERT(nullptr == q->getJobAt(10));
+
+
 }
 
 void test_removeJob(void){
@@ -43,6 +47,10 @@ void test_removeJob(void){
     Job* j2 = new Job(student,0,5,0,1.2,1.3);
     q->insertJob(j2,3);
     q->removeJob(0,0.2);
+    TEST_ASSERT_EQUAL_INT(1,q->getJobsInQueue().size());
+    TEST_ASSERT(j2 == q->getJobAt(0));
+    TEST_ASSERT_EQUAL_INT(0.2,j1->getTimeLeftQueue());
+    q->removeJob(15,0.5);
     TEST_ASSERT_EQUAL_INT(1,q->getJobsInQueue().size());
     TEST_ASSERT(j2 == q->getJobAt(0));
     TEST_ASSERT_EQUAL_INT(0.2,j1->getTimeLeftQueue());
