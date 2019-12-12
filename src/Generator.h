@@ -14,7 +14,6 @@ Generates the Users and therefor the Job submissions in the Simulation.
 #include <vector>
 #include "Machine.h"
 #include "Queue.h"
-#include <array>
 #include <iostream>
 
 /// \brief the increment of time in hours of each loop in the Simulation.
