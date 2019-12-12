@@ -107,6 +107,8 @@ public:
 	void report(); 
 	/// \brief resets all the metric attributes on the Machine if it is being run for another week.
 	void resetMetrics(); 
+	/// \brief adds a vector of Job pointers to jobsRunning and updates the timeLeftQueue of each Job to equal systemTime.
+	void addJobs(std::vector<Job*> jobs, double systemTime) {
 };
 
 

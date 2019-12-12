@@ -49,14 +49,17 @@ void Machine::checkJobsRunning(double systemTime) {
 		else{
             counter++;
 		}
-
 	}
 }
+
 void Machine::getJobsFromScheduler(double currentTime, double systemTime) {
-	std::vector<Job*> toRun = scheduler->getJobs(state, running, runningTotal, currentTime, systemTime);
-	for (auto e : toRun) {
-		jobsRunning.push_back(e); 
-		e->setTimeLeftQueue(systemTime); //Job has left wait queue and is now started runnning
+	addJobs(scheduler->getJobs(state, running, runningTotal, currentTime, systemTime), systemTime);
+}
+
+void Machine::addJobs(std::vector<Job*> jobs, double systemTime) {
+	for (auto e : jobs) {
+		jobsRunning.push_back(e);
+		e->setTimeLeftQueue(systemTime);
 	}
 }
 
@@ -79,7 +82,6 @@ void Machine::collector(Job* job) {
 	running[job->getCategory()] -= job->getNodes();
     (*this).runningTotal -= job->getNodes();
 
-	//do metric stuff, still needs to be done
 	
 	processedByQueue[job->getCategory()]++;
 		
