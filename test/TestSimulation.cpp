@@ -127,14 +127,6 @@ void test_scenario(void){
     for (int i = 1; i<5; i++){
         TEST_ASSERT_EQUAL_FLOAT(0,s.getMachine()->getWaitTimeByQueue()[i]);
     }
-    if (s.getMachine()->getProcessedByQueue()[0] != 0){
-  //      TEST_ASSERT_LESS_OR_EQUAL(64,s.getMachine()->getWaitTimeByQueue()[0]/(s.getMachine()->getProcessedByQueue()[0]+1));
-  //      TEST_ASSERT_LESS_OR_EQUAL(128, s.getMachine()->getTurnaroundRatioSummed()/s.getMachine()->getProcessedByQueue()[0]);
-    }
-    else {
-        TEST_ASSERT_LESS_OR_EQUAL(0,s.getMachine()->getWaitTimeByQueue()[0]);
-    }
-
 }
 
 void test_performance(void){

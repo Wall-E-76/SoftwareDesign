@@ -2,6 +2,8 @@
 #include <random>
 #include "Researcher.h"
 
+#define THRESHOLD std::array<int,5> {700,700,15,650,3}
+
 
 Generator::Generator(int totlNodes) {
 	struct PropertyQueue shortQueue {};
@@ -51,27 +53,22 @@ void Generator::addQueues(std::array<Queue*, 5> queues) {
 }
 
 int Generator::randomCategory(int i) {
-	int sum = 0;
-	// We find the number of possible category
-	std::array<bool, 5> permission = (*this).users.at(i)->getPermission();
-	for (int j = 0; j < 5; j++) {
-		if (permission.at(j)) sum++;
+	std::array<int,5> distribution = {0,0,0,0,0};
+    std::array<bool, 5> permission = (*this).users.at(i)->getPermission();
+	for (int j = 0; j<5;j++){
+	    if (permission.at(j)){
+	        if ((*this).getQueues()[j]->getSizeQueue()>THRESHOLD[j]){
+                distribution[j] = 1;
+            }
+	        else{
+                distribution[j] = 20;
+            }
+	    }
 	}
-	// Among the possible categories, we choose one randomly
 	std::random_device rd;
-	std::mt19937 rng(rd());
-	std::uniform_int_distribution<int> uni(1, sum);
-
-	int random_integer = uni(rng);
-
-	//We translate the random number into the real category number
-	int category = -1;
-	while (random_integer > 0) {
-		if (permission.at(category + 1)) {
-			random_integer--;
-		}
-		category++;
-	}
+	std::mt19937 gen(rd());
+    std::discrete_distribution<> d(distribution.begin(), distribution.end());
+    int category = d(gen);
 	return category;
 }
 
@@ -79,9 +76,7 @@ Job* Generator::createJob(int i) {
 	User* owner;
 	owner = (*this).users.at(i);
 	int category = (*this).randomCategory(i);
-	bool GPU = false;
-	if (category == 3)
-		GPU = true;
+	bool GPU = (category == 3);
 	std::random_device rd{};
 	std::mt19937 generator{ rd() };
 	int cores;

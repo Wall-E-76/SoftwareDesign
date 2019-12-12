@@ -1,12 +1,12 @@
 group: 0
 budget: 5000000
 expDistParam: 40
-permissions: 0,0,0,0,1
+permissions: 1,1,1,1,1
 +
 group: 1
 budget: 5000000000
 expDistParam: 20
-permissions: 0,0,1,0,1
+permissions: 0,1,1,1,1
 --
 curriculum: 0
 budget: 2000000000
@@ -18,7 +18,7 @@ curriculum: 1
 budget: 300000000000
 expDistParam: 78
 instCap: 50
-permissions: 1,1,1,0,0
+permissions: 1,1,0,0,0
 --
 numberResearchers: 10
 numberResearchersWithGrants: 2

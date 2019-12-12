@@ -59,7 +59,7 @@ public:
 	void addQueues(std::array<Queue*, 5> queue);
 	/// \brief adds user passed in method to users vector attribute.
 	void addUser(User* user);
-	/// \brief choses a random catgegory of Job for User at position "i" in users vector, based on permissions.
+	/// \brief choses a random category of Job for User at position "i" in users vector, based on permissions.
 	int randomCategory(int i);
 	/// \brief creates a random Job linked to User at position "i" in users vector.
 	Job* createJob(int i);

@@ -47,12 +47,18 @@ void test_initialization(){
 
 void test_randomCategory(void){
     Generator g = Generator();
-    struct Curriculum c = {5,10,60,{1,1,1,0,1}};
+    std::array<Queue*,5> queues;
+    for (int i =0; i<5;i++){
+        Queue* q = new Queue();
+        queues[i] = q;
+    }
+    g.addQueues(queues);
+    struct Curriculum c = {5,10,60,{1,1,1,1,1}};
     Student* s = new Student(c);
     g.addUser(s);
     int n =0;
     int randomNum1 = g.randomCategory(0);
-    TEST_ASSERT(randomNum1 == 0||randomNum1==1||randomNum1==2||randomNum1==3||randomNum1==4);
+   TEST_ASSERT(randomNum1 == 0||randomNum1==1||randomNum1==2||randomNum1==3||randomNum1==4);
     int randomNum2 = g.randomCategory(0);
     while (randomNum1==randomNum2 & n<30){
         n++;
@@ -71,15 +77,20 @@ void test_roundUp(void){
 
 void test_createJob(){
     Generator g = Generator();
-    struct Curriculum c = {5,10,60,{0,1,1,0,0}};
+    struct Curriculum c = {5,10,60,{1,1,1,0,0}};
     Student* s1 = new Student(c);
     Student* s2 = new Student(c);
+    std::array<Queue*,5> queues;
+    for (int i = 0; i<5;i++){
+        Queue* q = new Queue();
+        queues[i] = q;
+    }
     g.addUser(s1);
     g.addUser(s2);
     Job* j = g.createJob(1);
     TEST_ASSERT(j->getOwner() == s2);
     TEST_ASSERT_EQUAL_FLOAT(0,j->getTimeLeftQueue());
-    TEST_ASSERT( j->getCategory() == 1 || j->getCategory() == 2);
+    TEST_ASSERT( j->getCategory() == 0 || j->getCategory() == 1 || j->getCategory() == 2 ||j->getCategory() == 3 || j->getCategory() == 4);
     TEST_ASSERT(!j->needsGPU());
     TEST_ASSERT_GREATER_OR_EQUAL(j->getReservedTime(),g.getProperty()[j->getCategory()].timeMax);
     TEST_ASSERT_GREATER_OR_EQUAL(j->getNodes(),g.getProperty()[j->getCategory()].nodeMax);
@@ -88,14 +99,15 @@ void test_createJob(){
     TEST_ASSERT(!j->doneRunning(0.0));
     TEST_ASSERT_EQUAL_FLOAT(0,j->getTimeEnteredQueue());
     Job* j2 = g.createJob(1);
-    TEST_ASSERT(j->getNodes()!=j2->getNodes()||j->getCategory() != j2->getCategory()||j->getReservedTime()!=j2->getReservedTime()||j->getRuntime()!=j2->getRuntime());
-
-    struct Curriculum c2 = {5,10,60,{0,0,0,1,0}};
-    Student* s3 = new Student(c2);
-    g.addUser(s3);
-    Job* j3 = g.createJob(2);
-    TEST_ASSERT_EQUAL_INT(3,j3->getCategory());
-
+    std::cout << "Users : "<< g.getUsers().size()<< std::endl;
+    int n = 0;
+    while (n<10||j->getNodes()!=j2->getNodes()||j->getCategory() != j2->getCategory()||j->getReservedTime()!=j2->getReservedTime()||j->getRuntime()!=j2->getRuntime()){
+        n++;
+        j2 = g.createJob(1);
+    }
+    TEST_ASSERT_MESSAGE(n!=10, "randomCategory test went out of bound");
+    delete j;
+    delete j2;
 }
 
 
@@ -149,7 +161,7 @@ void test_lookForJobs(){
     Student* s2 = new Student(c2);
     g.addUser(s2);
     g.lookForJobs(10*TIMESTEP);
-    TEST_ASSERT(g.getQueues()[3]->nextJob()->getOwner() == s1 );
+    TEST_ASSERT(g.getQueues()[3]->nextJob()->getOwner() == s1);
     TEST_ASSERT(g.getQueues()[0]->nextJob()->getOwner() == s2);
 }
 

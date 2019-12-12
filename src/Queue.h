@@ -41,5 +41,7 @@ public:
 	Job* getJobAt(int n);
 	/// \brief returns jobsInQueue vector of Job pointers.
     std::vector <Job*> getJobsInQueue();
+    /// \brief returns the size of this Queue, and 0 if the Queue is empty.
+    int getSizeQueue();
 };
 

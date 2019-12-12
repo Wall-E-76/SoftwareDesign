@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Queue.h"
 
 Queue::Queue():jobsInQueue({})
@@ -45,4 +46,11 @@ int Queue::nextJobT(double time) {
 		}
 	}
 	return -1;
+}
+
+int Queue::getSizeQueue() {
+    if ((*this).jobsInQueue.empty()){
+        return 0;
+    }
+    return jobsInQueue.size();
 }
