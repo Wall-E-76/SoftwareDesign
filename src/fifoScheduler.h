@@ -106,8 +106,8 @@ private:
 	 \return pointer to oldest Job currently able to run from this Queue.
 
 */
+
 	Job* oldestCheck(int& oldest, double& oldestTime, int& n, int state,int stateCheck, 
 		double cutoffTime, int queue, double currentTime);
-
 };
 
