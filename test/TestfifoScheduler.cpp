@@ -9,7 +9,7 @@
 
 void setUp(){}
 void tearDown(){}
-/*
+
 void test_getJobsWeekend(void) {
 	FIFOScheduler fifo;
 	std::array<Queue*, 5> qs;
@@ -19,7 +19,7 @@ void test_getJobsWeekend(void) {
 	std::array<int, 5> running = { 0,0,0,0,0 }; int runningTotal = 0;
 	fifo.addQueues(qs);
 	struct Curriculum curr {};
-	curr.budget = 100000; curr.instResourceCap = 100000; curr.permission = { 0,0,0,0,1); curr.expoParameter = 10;
+	curr.budget = 100000; curr.instResourceCap = 100000; curr.permission = { 0,0,0,0,1}; curr.expoParameter = 10;
 	User* dummy = new Student(curr);
 	double t = 124; int state = 5;
 	Job* huge1 = new Job(dummy, 4, 16 * 60, 0, 30, 30);
@@ -53,7 +53,7 @@ void test_getJobsWeekday(void) {
 	std::array<int, 5> running = { 0,0,0,0,0 }; int runningTotal = 0;
 	fifo.addQueues(qs);
 	struct Curriculum curr {};
-	curr.budget = 100000; curr.instResourceCap = 100000; curr.permission = { 1,1,1,1,1); curr.expoParameter = 10;
+	curr.budget = 100000; curr.instResourceCap = 100000; curr.permission = { 1,1,1,1,1}; curr.expoParameter = 10;
 	User* dummy = new Student(curr);
 	double t = 20; int state = 1;
 	Job* gpu1 = new Job(dummy, 3, 16 * 5, 1, 8, 8);
@@ -66,7 +66,7 @@ void test_getJobsWeekday(void) {
 	TEST_ASSERT(qs[3]->getJobsInQueue().size() == 1);  //leave the one
 	TEST_ASSERT(qs[3]->getJobAt(0)->getTimeEnteredQueue() == 12);  //left the right one
 	Job* lrg1 = new Job(dummy, 2, 16 * 60, 0, 10, 10);
-	Job* lrg2 = new Job(dummy, 2, 16 * 10, 0, 10, 10);
+	Job* lrg2 = new Job(dummy, 2, 16 * 20, 0, 10, 10);
 	t += 10; //t=30
 	qs[2]->insertJob(lrg1, 13); qs[2]->insertJob(lrg2, 15);
 	jobs = fifo.getJobs(state, running, runningTotal, t, t);
@@ -74,31 +74,31 @@ void test_getJobsWeekday(void) {
 	TEST_ASSERT(jobs[0]->getTimeEnteredQueue() == 13); //took the first one
 	TEST_ASSERT(qs[2]->getJobsInQueue().size() == 1); //left the second one
 	TEST_ASSERT(runningTotal == 70);
-	Job* med1 = new Job(dummy, 1, 16 * MEDIUMMAXNODES, 0, 8, 8);
-	Job* med2 = new Job(dummy, 1, 16 * MEDIUMMAXNODES, 0, 8, 8);
-	Job* med3 = new Job(dummy, 1, 16 * MEDIUMMAXNODES, 0, 8, 8);
+	qs[2]->removeJob(0, t); //remove so next tests dont wait for this guy to run
+	Job* med1 = new Job(dummy, 1, 16 * 12, 0, 8, 8);
+	Job* med2 = new Job(dummy, 1, 16 * 12, 0, 8, 8);
+	Job* med3 = new Job(dummy, 1, 16 * 12, 0, 8, 8);
 	Job* med4 = new Job(dummy, 1, 16 * 8, 0, 8, 8);
 	Job* med5 = new Job(dummy, 1, 16 * 8, 0, 8, 8); //wont be taken, even though theres still room on machine, b/c reserved space for short jobs
 	Job* short1 = new Job(dummy, 0, 16 * 2, 0, 1, 1); //will be taken
 	qs[1]->insertJob(med1, 15); qs[1]->insertJob(med2, 16); qs[1]->insertJob(med3, 17); qs[1]->insertJob(med4, 18); qs[1]->insertJob(med5, 19);
 	qs[0]->insertJob(short1, 20);
 	jobs = fifo.getJobs(state, running, runningTotal, t, t);
-	TEST_ASSERT(jobs.size() == 5);//should only have taken the first large job, other one will push large jobs over 50% of nodes
-	TEST_ASSERT(qs[1]->getJobAt(0)->getTimeEnteredQueue() == 19); //left this one behind
-	TEST_ASSERT(qs[2]->getJobsInQueue().empty()); //should be gone
-	TEST_ASSERT(runningTotal == 116); //should be this many running total
-	TEST_ASSERT(running[0] == 2);
-	TEST_ASSERT(running[1] == 44);
-	TEST_ASSERT(running[2] == 60);
-	TEST_ASSERT(running[3] == 10);
-	TEST_ASSERT(running[4] == 0); //make sure all the individual running stats are correct
+	TEST_ASSERT_EQUAL_INT(5, jobs.size());//should only have taken the first large job, other one will push large jobs over 50% of nodes
+	TEST_ASSERT_EQUAL_FLOAT(19, qs[1]->getJobAt(0)->getTimeEnteredQueue()); //left this one behind
+	TEST_ASSERT_EQUAL_INT(116, runningTotal); //should be this many running total
+	TEST_ASSERT_EQUAL_INT(2, running[0]);
+	TEST_ASSERT_EQUAL_INT(44, running[1]);
+	TEST_ASSERT_EQUAL_INT(60, running[2]);
+	TEST_ASSERT_EQUAL_INT(10, running[3]);
+	TEST_ASSERT_EQUAL_INT(0, running[4]); //make sure all the individual running stats are correct
 
 }
 
 void test_oldestCheck(void) {
 	FIFOScheduler fifo;
 	struct Curriculum curr {};
-	curr.budget = 1000; curr.instResourceCap = 1000; curr.permission = { 0,1,0,0,0 }; curr.expoParameter = 10;
+	curr.budget = 1000; curr.instResourceCap = 1000; curr.permission = { 1,1,1,1,0 }; curr.expoParameter = 10;
 	User* dummy = new Student(curr);
 	std::array<Queue*, 5> qs;
 	for (int i = 0; i < 5; i++) {
@@ -136,7 +136,7 @@ void test_oldestCheck(void) {
 	TEST_ASSERT(nLarge == 1); //should be index of second job in queue
     TEST_ASSERT(temp->getTimeEnteredQueue()==88);
 
-	qs[2]->removeJob(nLarge);
+	qs[2]->removeJob(nLarge, t+1);
 	nLarge = 0;
 	oldest = 0; oldestTime = MAX_DOUBLE;
 	temp = fifo.oldestCheck_TEST(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, t);
@@ -164,12 +164,12 @@ void test_fillReserved(void) {
 	Job* third = new Job(dummy, 1, 16 * 12, 0, 8, 8);
 	double currentTime = 70; //well before weekend cutoff
 	std::vector<Job*> results; //our return vector
+	int state = 2; //start of in a state where there is no need to check time
 	results = fifo.fillReserved_TEST(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
 	TEST_ASSERT(results.size() == 0); //testing to see that it broke out of method when queue is empty and returns empty result vector
 	q->insertJob(first, currentTime);
 	q->insertJob(second, currentTime);
 	q->insertJob(third, currentTime);
-	int state = 2; //start of in a state where there is no need to check time
 	results = fifo.fillReserved_TEST(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
 	TEST_ASSERT(results.size() == 2); //should only have taken first two jobs
 	TEST_ASSERT(q->getJobsInQueue().size()==1); //still one guy waiting in line
@@ -186,12 +186,15 @@ void test_fillReserved(void) {
 	TEST_ASSERT_EQUAL_INT(40, running); //should have increased nodes running to 36
 	TEST_ASSERT_EQUAL_INT(40, runningTotal); //should have increased nodes running to 36
 	
-}*/
+}
 
 
 int main(void)
 {
     UNITY_BEGIN();
-   // RUN_TEST(test_fillReserved);
+    RUN_TEST(test_fillReserved);
+   	RUN_TEST(test_oldestCheck);
+	RUN_TEST(test_getJobsWeekday);
+	RUN_TEST(test_getJobsWeekend);
     return UNITY_END();
 }
