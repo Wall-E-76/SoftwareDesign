@@ -50,6 +50,10 @@ std::vector<Job*> FIFOScheduler::fillReserved(int& running, int& runningTotal, Q
 	return nextJobs;
 }
 
+std::vector<Job*> FIFOScheduler::fillReserved_TEST(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck, double cutoffTime, double currentTime, int limitNodes, double systemTime){
+	return fillReserved(running, runningTotal, queue, state, stateCheck, cutoffTime, currentTime, limitNodes, systemTime);		
+}
+
 Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int state, int stateCheck, double cutoffTime, int queue, double currentTime) {
 
 	Job* temp = queues[queue]->nextJob();
@@ -72,6 +76,10 @@ Job* FIFOScheduler::oldestCheck(int& oldest, double& oldestTime, int& n, int sta
     }
 
 	return temp;
+}
+
+Job* FIFOScheduler::oldestCheck_TEST(int& oldest, double& oldestTime, int& n, int state, int stateCheck, double cutoffTime, int queue, double currentTime) {
+	return oldestCheck(oldest, oldestTime, n, state, stateCheck, cutoffTime, queue, currentTime);
 }
 
 std::vector<Job*> FIFOScheduler::getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime, double systemTime) {

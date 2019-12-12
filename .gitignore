@@ -2,6 +2,8 @@
 Debug/
 SoftwareDesign.v*
 SoftwareDesign.sln
+SWDfinaltest.v*
+SWDfinaltest.sln
 build/*
 unity/*
 # Prerequisites

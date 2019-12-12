@@ -67,7 +67,7 @@ public:
 	void check(Job* job, double systemTime);
 	/// \brief iterates through users vector to see if any User has a nextJobTime equal or less to systemTime.
 	void lookForJobs(double systemTime);
-	/// \brief function used to round up time.
+	/// \brief function used to round up a random time to the nearest timeStep for Simulation purposes.
 	double roundUp(double time);
 };
 

@@ -117,19 +117,19 @@ void test_oldestCheck(void) {
 	int state = 2; //need to check large queue for reserved times
 	Job* temp;
 
-	temp = fifo.oldestCheck(oldest, oldestTime, nShort, state, 4, WEEKENDCUTOFF, 0, t);
+	temp = fifo.oldestCheck_TEST(oldest, oldestTime, nShort, state, 4, WEEKENDCUTOFF, 0, t);
 	TEST_ASSERT(qs[0]->getJobsInQueue().size() == 0); //should be no jobs left in this queue;
 	TEST_ASSERT(oldest == 0);
 	TEST_ASSERT(oldestTime == 93); //this is the time the one job entered the queue
 	TEST_ASSERT(nShort == 0); //should be 0, index of first job in queue
 	TEST_ASSERT(temp->getTimeEnteredQueue()==93);
-    temp = fifo.oldestCheck(oldest, oldestTime, nMedium, state, 3, WEEKENDCUTOFF, 1, t);
+    temp = fifo.oldestCheck_TEST(oldest, oldestTime, nMedium, state, 3, WEEKENDCUTOFF, 1, t);
 	TEST_ASSERT(qs[1]->getJobsInQueue().size() == 0); //should be no jobs in this queue
 	TEST_ASSERT(oldest == 0); //should still be unchanged because no jobs in this queue
 	TEST_ASSERT(oldestTime == 93); //this is the time the one job entered the queue
 	TEST_ASSERT(nMedium == 0); //should be unchanged
     TEST_ASSERT(temp==nullptr);
-	temp = fifo.oldestCheck(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, t);
+	temp = fifo.oldestCheck_TEST(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, t);
 	TEST_ASSERT(qs[2]->getJobsInQueue().size() == 1); //should have one left in queue
 	TEST_ASSERT(oldest == 2); //should now be considered queue with oldest job
 	TEST_ASSERT(oldestTime == 88); //should be the time the second job in line entered the queue
@@ -139,7 +139,7 @@ void test_oldestCheck(void) {
 	qs[2]->removeJob(nLarge);
 	nLarge = 0;
 	oldest = 0; oldestTime = MAX_DOUBLE;
-	temp = fifo.oldestCheck(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, t);
+	temp = fifo.oldestCheck_TEST(oldest, oldestTime, nLarge, state, 2, WEEKENDCUTOFF, 2, t);
 	TEST_ASSERT(qs[2]->getJobsInQueue().size() == 1); //should still be in queue
 	TEST_ASSERT(oldest == 0); //should not be changed
 	TEST_ASSERT(oldestTime == MAX_DOUBLE); //should not be changed
@@ -164,13 +164,13 @@ void test_fillReserved(void) {
 	Job* third = new Job(dummy, 1, 16 * 12, 0, 8, 8);
 	double currentTime = 70; //well before weekend cutoff
 	std::vector<Job*> results; //our return vector
-	results = fifo.fillReserved(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
+	results = fifo.fillReserved_TEST(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
 	TEST_ASSERT(results.size() == 0); //testing to see that it broke out of method when queue is empty and returns empty result vector
 	q->insertJob(first, currentTime);
 	q->insertJob(second, currentTime);
 	q->insertJob(third, currentTime);
 	int state = 2; //start of in a state where there is no need to check time
-	results = fifo.fillReserved(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
+	results = fifo.fillReserved_TEST(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
 	TEST_ASSERT(results.size() == 2); //should only have taken first two jobs
 	TEST_ASSERT(q->getJobsInQueue().size()==1); //still one guy waiting in line
 	TEST_ASSERT_EQUAL_INT(39, running); //should have increased nodes running to 39
@@ -180,7 +180,7 @@ void test_fillReserved(void) {
 	currentTime= 98; //6 hours before weekend cut off
 	Job* fourth = new Job(dummy, 1, 16 * 10, 0, 4, 4);
 	q->insertJob(fourth, currentTime);
-	results = fifo.fillReserved(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
+	results = fifo.fillReserved_TEST(running, runningTotal, q, state, 3, WEEKENDCUTOFF, currentTime, medMin, currentTime);
 	TEST_ASSERT(results.size() == 1); //should have just taken the one job this time
 	TEST_ASSERT(q->getJobsInQueue().size()==1); //still one guy waiting in line
 	TEST_ASSERT_EQUAL_INT(40, running); //should have increased nodes running to 36
