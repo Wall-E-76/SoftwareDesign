@@ -59,9 +59,11 @@ public:
 	*/
 	std::vector<Job*> getJobs(int state, std::array <int, 5>& running, int& runningTotal, double currentTime, double systemTime);
 
+	/// \brief public version of fillReserved used for Unit testing.
 	std::vector<Job*> fillReserved_TEST(int& running, int& runningTotal, Queue*& queue, int state, int stateCheck,
 		double cutoffTime, double currentTime, int limitNodes, double systemTime);
 		
+	/// \brief public version of oldestCheck used for Unit testing	
 	Job* oldestCheck_TEST(int& oldest, double& oldestTime, int& n, int state,int stateCheck, 
 		double cutoffTime, int queue, double currentTime);
 
