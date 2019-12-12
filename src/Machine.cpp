@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "Machine.h"
 
@@ -16,7 +15,6 @@ Machine::Machine() {
 	state = -1;
 	scheduler = nullptr;
 }
-
 
 Scheduler *Machine::getScheduler() {
     return (*this).scheduler;

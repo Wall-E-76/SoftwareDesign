@@ -8,7 +8,7 @@ Simulation::Simulation(int totalNode, int weeks) :
 		weeksSimulated(weeks)
 {}
 
-void Simulation::setupFile(std::string input) {
+void Simulation::setupFile(const std::string& input) {
 	std::cout << "Beginning of setup" << std::endl;
 	std::array<Queue*, 5> queues{};
 	for (int i = 0; i < 5; i++) {
@@ -140,8 +140,8 @@ void Simulation::computeTimeSteps() {
     currentTime = 0;
 }
 
-void Simulation::run() {
-    (*this).setupFile("./src/inputSA.txt"); // Or change to inputSA.txt
+void Simulation::run(const std::string& input) {
+    (*this).setupFile(input);
 	while (weekCounter < weeksSimulated) {
 		(*this).computeTimeSteps();
         (*this).machine.report();

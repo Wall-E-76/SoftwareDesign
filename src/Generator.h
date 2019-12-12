@@ -31,9 +31,14 @@ Generates the Users and therefor the Job submissions in the Simulation.
 /// \brief maximum nodes a Job submitted to the huge Queue can reserve.
 #define HUGEMAXNODES 128
 
+
+/// \brief Data structure containing all the properties specific to the Job contained in this Queue
 struct PropertyQueue {
+    /// \brief Maximum number of nodes that a Job can have
 	int nodeMax;
+	/// \brief Minimum number of nodes that a Job can have
 	int nodeMinExclusive;
+	/// Maximum duration of a Job
 	int timeMax;
 };
 
@@ -41,7 +46,7 @@ class Generator {
 private:
 	/// \brief vector of pointers to User objects in the Simulation.
 	std::vector <User*> users;
-	/// \brief ???
+	/// \brief properties of the Job contained in each Queue.
 	std::array<PropertyQueue, 5> property;
 	/// \brief array of pointers to Queue objects used in Simulation.
 	std::array<Queue*, 5> queues;

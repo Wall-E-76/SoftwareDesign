@@ -43,10 +43,10 @@ private:
 
 public:
     explicit Simulation(int totalNode, int weeks);
-	/// \brief called after the setUpFile(), this is the method that runs the simulation for the entire duration of weeks specified.
-	void run();
+	/// \brief this is the method that runs the simulation for the entire duration of weeks specified.
+	void run(const std::string& input);
 	/// \brief takes care of the setup of all the objects in the Simulation, and reads the input file to create the Users for this scenario.
-	void setupFile(std::string input);
+	void setupFile(const std::string& input);
 	/// \brief called by run(), this method engages all the actions in the Simulation for a single cycle, incrementing the time step until the week is done.
     void computeTimeSteps();
 	/// \brief getter used in Unit testing - returns the array of Queue pointers of the Simulation.

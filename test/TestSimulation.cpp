@@ -133,7 +133,7 @@ void test_performance(void){
     double time =0;
     Simulation s (128,10);
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    s.run();
+    s.run("./src/inputSA.txt");
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     time = std::chrono::duration_cast<std::chrono::seconds> (end - begin).count();
     TEST_ASSERT_LESS_OR_EQUAL(5, time/10);

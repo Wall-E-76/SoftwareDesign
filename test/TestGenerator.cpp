@@ -90,7 +90,7 @@ void test_createJob(){
     Job* j = g.createJob(1);
     TEST_ASSERT(j->getOwner() == s2);
     TEST_ASSERT_EQUAL_FLOAT(0,j->getTimeLeftQueue());
-    TEST_ASSERT( j->getCategory() == 0 || j->getCategory() == 1 || j->getCategory() == 2 ||j->getCategory() == 3 || j->getCategory() == 4);
+    TEST_ASSERT( j->getCategory() == 0 || j->getCategory() == 1 || j->getCategory() == 2);
     TEST_ASSERT(!j->needsGPU());
     TEST_ASSERT_GREATER_OR_EQUAL(j->getReservedTime(),g.getProperty()[j->getCategory()].timeMax);
     TEST_ASSERT_GREATER_OR_EQUAL(j->getNodes(),g.getProperty()[j->getCategory()].nodeMax);
@@ -101,7 +101,7 @@ void test_createJob(){
     Job* j2 = g.createJob(1);
     std::cout << "Users : "<< g.getUsers().size()<< std::endl;
     int n = 0;
-    while (n<10||j->getNodes()!=j2->getNodes()||j->getCategory() != j2->getCategory()||j->getReservedTime()!=j2->getReservedTime()||j->getRuntime()!=j2->getRuntime()){
+    while (n<30||j->getNodes()!=j2->getNodes()||j->getCategory() != j2->getCategory()||j->getReservedTime()!=j2->getReservedTime()||j->getRuntime()!=j2->getRuntime()){
         n++;
         j2 = g.createJob(1);
     }
